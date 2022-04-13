@@ -19,7 +19,8 @@ from taskManagerApp import views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'tasks', views.CardView, 'task')
+router.register(r'lists', views.ListView, 'list')
+router.register(r'cards', views.CardView, 'card')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

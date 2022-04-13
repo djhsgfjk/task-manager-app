@@ -1,14 +1,8 @@
 import React, {Component} from "react";
 import TasksList from "./TasksList";
 import axios from "axios";
-
-const styles = {
-  listsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  }
-};
+import ActionButton from "./ActionButton";
+import "./styles.css"
 
 // const initialState =[
 //   {
@@ -46,40 +40,35 @@ const styles = {
 //
 //   }
 // ];
+
 const initialState = []
 
 class App extends Component{
-  constructor(props) {
-    super(props);
-    this.state = {lists: initialState}
-  }
+    constructor(props) {
+      super(props);
+      this.state = {lists: initialState}
+    }
 
   componentDidMount() {
-    this.refreshList()
+    this.refreshProject()
   }
 
-  refreshList() {
+  refreshProject() {
     axios
-        .get('http://localhost:8000/api/tasks/')
-        .then(res => this.setState({lists:
-              [
-                  {
-                    title: 'TO DO',
-                    id: 0,
-                    cards: res.data
-                  }
-              ]
-        }))
+        .get('http://localhost:8000/api/lists/')
+        .then(res => this.setState({lists: res.data}))
         .catch(err => console.log(err))
   }
 
   render () {
-    const lists = this.state.lists;
+    const {lists} = this.state;
+    const newListIndex = lists.length > 0 ? +lists[lists.length-1].index + 1 : 1
     return (
         <div className="App">
           <h2>My project</h2>
-          <div style={styles.listsContainer}>
-            {lists.map(list => <TasksList title={list.title} cards={list.cards}/>)}
+          <div className="listsContainer">
+            {lists.map(list => <TasksList key={list.id} listId={list.id} title={list.title} cards={list.cards}/>)}
+            <ActionButton list index={newListIndex}/>
           </div>
         </div>
     );
