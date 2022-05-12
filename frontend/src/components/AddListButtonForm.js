@@ -6,8 +6,9 @@ import Card from "@mui/material/Card";
 import {TextareaAutosize} from "@mui/material";
 import "./styles.css"
 import axios from "axios";
+import "./styles.css"
 
-class ActionButton extends Component {
+class AddListButtonForm extends Component {
 
 	constructor(props) {
 		super(props);
@@ -24,12 +25,11 @@ class ActionButton extends Component {
 	}
 
 	renderAddButton = () => {
-		const {list} = this.props;
-		const buttonText = list ? "Add another list" : "Add another card";
+		const buttonText = "Add another list";
 
 		return (
 			<div
-				className={list ? "listOpenFormButton": "cardOpenFormButton"}
+				className="listOpenFormButton"
 				onClick={this.openForm}
 			>
 				<Icon>+</Icon>
@@ -44,20 +44,12 @@ class ActionButton extends Component {
 	}
 
 	handleSubmit = () => {
-		const {list} = this.props
 		const {input} = this.state
 		const {index} = this.props
-		const {listId} = list ? {listId: null} : this.props
-
-
-		const url = list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
-		const data = list ? {
+		const url = "http://localhost:8000/api/lists/"
+		const data = {
 			index: index,
 			title: input,
-		} : {
-			listId: listId,
-			index: index,
-			text: input
 		}
 		console.log(data)
 
@@ -71,14 +63,13 @@ class ActionButton extends Component {
 	}
 
 	renderForm = () => {
-		const {list} = this.props;
-		const placeHolder = list ?  "Enter list title..." : "Enter the text of the card...";
-		const buttonTitle = list ? "Add list" : "Add card";
+		const placeHolder = "Enter list title...";
+		const buttonTitle = "Add list";
 
 		return (
-			<div className={list ? "listContainer": null}>
+			<div className="listContainer">
 				<Card style={{
-					minHeight: list ? 30 : 80,
+					minHeight: 30,
 					padding: '6px 8px 2px',
 				}}>
 					<TextareaAutosize
@@ -93,8 +84,8 @@ class ActionButton extends Component {
 					<Button
 						variant="contained"
 						style={{
-						color: "white",
-						backgroundColor: "#008B8B",
+							color: "white",
+							backgroundColor: "#1E90FF",
 						}}
 						onClick={this.handleSubmit}
 					>
@@ -113,4 +104,4 @@ class ActionButton extends Component {
 	}
 }
 
-export default ActionButton;
+export default AddListButtonForm;

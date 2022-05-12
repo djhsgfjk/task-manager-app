@@ -6,11 +6,13 @@ import "./styles.css"
 
 function TaskCard({text}) {
 	return (
-		<Card className="cardContainer">
-			<CardContent>
-				<Typography variant="body2">{text}</Typography>
-			</CardContent>
-		</Card>
+			<div id="cardContainer">
+				<Card>
+					<CardContent>
+						<Typography variant="body2">{text}</Typography>
+					</CardContent>
+				</Card>
+			</div>
 	);
 }
 

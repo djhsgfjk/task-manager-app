@@ -1,6 +1,7 @@
 import React from "react";
 import TaskCard from "./TaskCard";
-import ActionButton from "./ActionButton";
+import AddCardButton from "./AddCardButton";
+import AddCardForm from "./AddCardForm";
 import "./styles.css"
 
 function TasksList({listId, title, cards}) {
@@ -8,9 +9,18 @@ function TasksList({listId, title, cards}) {
 
 	return (
 		<div className="listContainer">
-			<h3>{title}</h3>
-			{cards.map(card => <TaskCard key={card.id} text={card.text}/>)}
-			<ActionButton listId={listId} index={newCardIndex}/>
+			<div className="listContent">
+				<div id="listTitleContainer">
+					<h3>{title}</h3>
+				</div>
+				<div id="cardsContainer">
+					{cards.map(card => <TaskCard key={card.id} text={card.text}/>)}
+					<AddCardForm listId={listId} index={newCardIndex}/>
+				</div>
+				<div id="actionButtonContainer">
+					<AddCardButton listId={listId}/>
+				</div>
+			</div>
 		</div>
 	);
 }
