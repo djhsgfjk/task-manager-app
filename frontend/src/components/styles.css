@@ -33,7 +33,7 @@
 #listTitleContainer{
     position: relative;
 }
-#cardsContainer{
+.cardsContainer{
     display: block;
     min-height: 0;
     overflow-x: hidden;
@@ -50,8 +50,9 @@
 }
 #actionButtonContainer{
     vertical-align:bottom;
-    display: flex;
+    display: inline-block;
     justify-content: space-between;
+    width: 100%!important;
 
 }
 .Typography{

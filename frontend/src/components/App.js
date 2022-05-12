@@ -6,7 +6,7 @@ import "./styles.css"
 
 import {connect} from "react-redux";
 import axios from "axios";
-import AddListButtonForm from "./AddListButtonForm";
+import ActionButton from "./ActionButton";
 
 
 class App extends Component{
@@ -31,7 +31,7 @@ class App extends Component{
                 </div>
                 <div id="listsContainer">
                     {lists.map(list => <TasksList key={list.id} listId={list.id} title={list.title} cards={list.cards}/>)}
-                    <AddListButtonForm index={newListIndex}/>
+                    <ActionButton list index={newListIndex}/>
                 </div>
             </div>
         );
