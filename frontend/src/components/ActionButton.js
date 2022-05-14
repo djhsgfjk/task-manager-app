@@ -4,24 +4,29 @@ import {Button, Icon} from "@mui/material";
 import {Close} from "@mui/icons-material";
 import Card from "@mui/material/Card";
 import {TextareaAutosize} from "@mui/material";
-import "./styles.css"
 import axios from "axios";
 import {connect} from "react-redux";
-import "./styles.css"
 
 class ActionButton extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {formOpen: false};
+		this.state = {formOpen: false, input: ''};
 		this.formRef = React.createRef();
 		this.passClick = true;
 	}
 
 	openForm = async () => {
 		await this.setState({formOpen: true});
-		const e = document.getElementById(`cardsContainer_${this.props.listId}`)
-		e.scrollTo(null, e.scrollHeight);
+
+		const a = document.getElementById(`cardsContainer_${this.props.listId}`)
+		if (a && a.scrollHeight > a.offsetHeight)
+			a.scrollTo(null, a.scrollHeight);
+
+		const e = document.getElementById("addFormTextArea")
+		e.select()
+
+
 		document.addEventListener('click', this.handleClickOutside, false);
 	}
 
@@ -57,18 +62,25 @@ class ActionButton extends Component {
 			</div>
 		);
 	}
-	handleInputChange = event => {
-		this.setState({input: event.target.value})
-		//console.log(this.state.input)
+
+	handleKeyPress = (e) => {
+		if (e.key === "Enter")
+			this.handleSubmit()
+	}
+
+	handleInputChange = (e) => {
+		const input = e.target.value
+		if (!(input[input.length-1] === '\n'))
+			this.setState({input: input})
 	}
 
 	handleSubmit = () => {
-		const {input} = this.state
+		const input = this.state.input.trim()
 		if (typeof input != "string" || input === '')
 			return
 		const {list} = this.props
 		const {index} = this.props
-		const {listId} = list ? {listId: null} : this.props
+		const {listId} = this.props
 
 
 		const url = list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
@@ -84,20 +96,12 @@ class ActionButton extends Component {
 
 		axios.post(url, data)
 			.then(res => {
-				console.log(res);
 				console.log(res.data);
-				this.refreshProject()
+				list ? this.props.addList(res.data) : this.props.addCard(res.data)
+				this.closeForm()
 				this.setState({input: undefined})
 			})
 			.catch(err => console.log(err))
-	}
-
-	refreshProject = async () => {
-		const res = await axios
-			.get('http://localhost:8000/api/lists/')
-			.catch(err => console.log(err))
-		this.props.refresh(res.data)
-		this.closeForm()
 	}
 
 	renderForm = () => {
@@ -118,6 +122,9 @@ class ActionButton extends Component {
 							autoFocus={true}
 							value={this.state.input}
 							onChange={this.handleInputChange}
+							onKeyPress={(e) => {return this.handleKeyPress(e)}}
+							id="addFormTextArea"
+							style={list? {fontSize:"1.17em"}:{padding:10}}
 						/>
 					</Card>
 					<div className="formButtonGroup">
@@ -125,7 +132,7 @@ class ActionButton extends Component {
 							variant="contained"
 							style={{
 								color: "white",
-								backgroundColor: "#1E90FF",
+								backgroundColor: "#3498DB",
 							}}
 							onClick={this.handleSubmit}
 						>
@@ -145,7 +152,8 @@ class ActionButton extends Component {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		refresh: (payload) => dispatch({ type: 'REFRESH' , payload: payload}),
+		addList: (payload) => dispatch({ type: 'ADD_LIST' , payload: payload}),
+		addCard: (payload) => dispatch({ type: 'ADD_CARD' , payload: payload}),
 	}
 }
 

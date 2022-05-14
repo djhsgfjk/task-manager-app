@@ -4,12 +4,12 @@ from .models import Card, List
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ("listId", "index", "text")
+        fields = ("listId", "id", "index", "text", "done")
 
 class CardInListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ("id", "index", "text")
+        fields = ("id", "index", "text", "done")
 
 class ListSerializer(serializers.ModelSerializer):
 

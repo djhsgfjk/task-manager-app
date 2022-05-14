@@ -41,6 +41,34 @@ const listsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case "REFRESH":
 			return action.payload
+		case "UPDATE_LIST":
+			return [...state].map((list) => {
+				if (list.id === action.payload.id)
+					return action.payload
+				else
+					return list
+			})
+		case "ADD_LIST":
+			return [...state, action.payload]
+		case "UPDATE_CARD":
+			return [...state].map((list) => {
+				if (list.id === action.payload.listId)
+					return {...list, cards:list.cards.map((card) => {
+							if (card.id === action.payload.id)
+								return action.payload
+							else
+								return card
+						})}
+				else
+					return list
+			})
+		case "ADD_CARD":
+			return [...state].map((list) => {
+				if (list.id === action.payload.listId)
+					return {...list, cards: [...list.cards, action.payload]}
+				else
+					return list
+			})
 		default:
 			return state
 	}
