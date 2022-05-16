@@ -50,8 +50,7 @@ class ActionButton extends Component {
 
 	renderAddButton = () => {
 		const {list} = this.props;
-		const buttonText = list ? "Add another list" : "Add another card";
-
+		const buttonText = list ? "Add a list" : "Add a card";
 		return (
 			<div
 				className={list ? "listOpenFormButton": "cardOpenFormButton"}
@@ -70,7 +69,7 @@ class ActionButton extends Component {
 
 	handleInputChange = (e) => {
 		const input = e.target.value
-		if (!(input[input.length-1] === '\n'))
+		if (input.indexOf('\n') < 0)
 			this.setState({input: input})
 	}
 
@@ -112,7 +111,14 @@ class ActionButton extends Component {
 		return (
 			<div className={list ? "listContainer" : null} ref={this.formRef}>
 				<div id="actionButtonContainer">
-					<Card style={{
+					<Card
+						sx={list ? {
+							border: 1,
+							borderColor: "#3498DB",
+							borderWidth: 2.6,
+							boxShadow: 0,
+						} : {}}
+						style={{
 						minHeight: list ? 30 : 80,
 						padding: '6px 8px 2px',
 					}} >
@@ -124,7 +130,7 @@ class ActionButton extends Component {
 							onChange={this.handleInputChange}
 							onKeyPress={(e) => {return this.handleKeyPress(e)}}
 							id="addFormTextArea"
-							style={list? {fontSize:"1.17em"}:{padding:10}}
+							style={list? {fontSize:"1.17em"}:{padding:10, width:"92%"}}
 						/>
 					</Card>
 					<div className="formButtonGroup">

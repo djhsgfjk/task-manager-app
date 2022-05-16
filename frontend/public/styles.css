@@ -22,6 +22,21 @@
     background-color: #EBECF0;
     border-radius: 3px;
 }
+.listHead {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.listTitle {
+    width: 85%;
+    padding-right: 10px;
+}
+.listBin {
+    filter: invert(49%) sepia(99%) saturate(651%) hue-rotate(177deg) brightness(89%) contrast(92%);
+    width: 10%;
+    height: 10%;
+    cursor: pointer;
+}
 .listContent{
     position: relative;
     display: flex;
@@ -45,6 +60,7 @@
 .cardAndCheckBox{
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 .cardContainer{
     word-wrap: break-word;
@@ -54,7 +70,7 @@
     width: 100%;
 }
 #cardTextContainer {
-    width: 94%;
+    width: 92%;
     cursor: pointer;
 }
 #actionButtonContainer{
@@ -123,8 +139,11 @@
 #binContainer {
     position: fixed;
     right: 0;
-    bottom: 0;
+    bottom: 1vh;
     cursor: pointer;
+    height: 10vh;
+    width: 10vh;
+
     filter: invert(49%) sepia(99%) saturate(651%) hue-rotate(177deg) brightness(89%) contrast(92%);
 }
 body {

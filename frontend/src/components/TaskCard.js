@@ -6,6 +6,7 @@ import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import {connect} from "react-redux";
+import {Draggable} from "react-beautiful-dnd";
 
 class TaskCard extends Component{
 
@@ -41,14 +42,31 @@ class TaskCard extends Component{
 		const {done} = this.props;
 
 		return (
-			<div className="cardContainer" id={cardId} ref={this.props.innerRef}>
-				<Card>
-					<CardContent className="cardAndCheckBox">
-						<Checkbox sx={{padding:0, color:"#3498DB", '&.Mui-checked': {color: "#3498DB",},}} checked={done} onChange={this.handeCheckChange}/>
-						<UpdateForm id={cardId} listId={listId} index={cardIndex} text={text} done={done}/>
-					</CardContent>
-				</Card>
-			</div>
+			<Draggable draggableId={''+cardId} index={cardIndex} type='cards'>
+				{(provided) => (
+					<div
+						className="cardContainer"
+						{...provided.draggableProps}
+						{...provided.dragHandleProps}
+						ref={provided.innerRef}
+					>
+						<Card sx={{cursor: "default"}}>
+							<CardContent className="cardAndCheckBox">
+								<UpdateForm
+									id={cardId}
+									listId={listId}
+									index={cardIndex}
+									text={text}
+									done={done}/>
+								<Checkbox
+									sx={{padding:0, color:"#3498DB", '&.Mui-checked': {color: "#3498DB",},}}
+									checked={done}
+									onChange={this.handeCheckChange}/>
+							</CardContent>
+						</Card>
+					</div>
+				)}
+			</Draggable>
 		);
 	}
 }

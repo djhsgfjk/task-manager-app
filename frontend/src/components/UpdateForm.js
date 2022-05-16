@@ -31,7 +31,7 @@ class UpdateForm extends Component {
 
 	handleInputChange = (e) => {
 		const input = e.target.value
-		if (!(input[input.length-1] === '\n'))
+		if (input.indexOf('\n') < 0)
 			this.setState({input: input})
 	}
 
@@ -75,12 +75,12 @@ class UpdateForm extends Component {
 		return (
 				<div id = {list ? "updateListFormContainer" : "updateCardFormContainer"} style={{width: "100%"}}>
 					<Card
-						sx={{
+						sx={list ? {
 							border: 1,
 							borderColor: "#3498DB",
 							borderWidth: 2.6,
 							boxShadow: 0,
-						}}>
+						} : {boxShadow: 0}}>
 						<TextareaAutosize
 							className="textArea"
 							style={list ? {fontSize:"1.17em", fontWeight: "bolder"} : {padding:4.5, width:"90%"}}
