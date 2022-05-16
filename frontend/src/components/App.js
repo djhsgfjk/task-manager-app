@@ -85,7 +85,7 @@ class App extends Component {
 		if (!(pastIndex === newIndex)) {
 			const newLists = moveElementInArray(this.props.lists, pastIndex, newIndex);
 
-			this.props.updateProject(newLists);
+			this.props.updateProject(newLists.map((list, index) => ({...list, index:index})));
 
 			newLists.forEach((list, index) => {
 				if (!(list.index === index))
@@ -96,7 +96,6 @@ class App extends Component {
 	}
 
 	onCardsDragEnd = (result) => {
-		console.log(result)
 		const cardId = +result.draggableId
 		const pastIndex = result.source.index
 		const pastListId = +result.source.droppableId
@@ -117,11 +116,12 @@ class App extends Component {
 		if (pastListId === newListId) {
 			if (!(pastIndex === newIndex)) {
 				const {lists} = this.props;
-				const list = lists.find((list) => (list.id === pastListId));
-				const cards = moveElementInArray(list.cards, pastIndex, newIndex);
+				const list = lists.find((list) => (list.id === pastListId))
+				const cards = moveElementInArray(list.cards, pastIndex, newIndex)
 
-				this.props.updateList({...list, cards: cards})
+				this.props.updateListAndCards({...list, cards: cards.map((card, index) => ({...card, index:index}))})
 				cards.forEach((card, index) => {
+					console.log(card, index)
 					if (!(card.index === index))
 						this.uploadCardChanges({...card, listId: list.id, index: index});
 				});
@@ -133,11 +133,9 @@ class App extends Component {
 				.cards.find((card) => (card.id === cardId));
 			const newList = lists.find((list) => (list.id === newListId));
 			const newCards = moveElementInArray([...(newList.cards), card], newList.cards.length, newIndex);
-			console.log(newCards)
-
 
 			this.props.deleteCard(pastListId, cardId, pastIndex);
-			this.props.updateList({...newList, cards: newCards});
+			this.props.updateListAndCards({...newList, cards: newCards.map((card, index) => ({...card, index:index}))});
 
 			newCards.forEach((card, index) => {
 				if (!(card.index === index) || card.id === cardId)
@@ -155,7 +153,7 @@ class App extends Component {
 			<div id="app">
 				<div id="project">
 					<div id="projectTitleContainer">
-						<h2>My project</h2>
+						<h2>Task manager</h2>
 					</div>
 					<DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
 						<Droppable droppableId={'all-lists'} direction={'horizontal'} type='lists'>
@@ -211,7 +209,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		refresh: (payload) => dispatch({type: 'REFRESH', payload: payload}),
 		updateProject: (payload) => dispatch({type: 'UPDATE_PROJECT', payload: payload}),
-		updateList: (payload) => dispatch({type: 'UPDATE_LIST', payload: payload}),
+		updateListAndCards: (payload) => dispatch({type: 'UPDATE_LIST_AND_CARDS', payload: payload}),
 		updateCard: (payload) => dispatch({type: 'UPDATE_CARD', payload: payload}),
 		deleteCard: (listId, cardId, cardIndex) => dispatch({
 			type: 'DELETE_CARD',

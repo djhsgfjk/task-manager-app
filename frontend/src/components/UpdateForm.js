@@ -31,7 +31,9 @@ class UpdateForm extends Component {
 
 	handleInputChange = (e) => {
 		const input = e.target.value
-		if (input.indexOf('\n') < 0)
+		const {list} = this.props;
+		const max_len = list ? 50 : 150
+		if (input.indexOf('\n') < 0 && input.length < max_len)
 			this.setState({input: input})
 	}
 

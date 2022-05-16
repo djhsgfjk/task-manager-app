@@ -26,35 +26,42 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    cursor: pointer;
+    height: 90px;
+
 }
 .listTitle {
     width: 85%;
     padding-right: 10px;
+    position: relative;
+    word-wrap: break-word;
 }
 .listBin {
     filter: invert(49%) sepia(99%) saturate(651%) hue-rotate(177deg) brightness(89%) contrast(92%);
     width: 10%;
-    height: 10%;
+    height: 100%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 .listContent{
     position: relative;
     display: flex;
     flex-direction: column;
     width: 100%!important;
-    max-height: 80vh;
 
 }
-#listTitleContainer{
+.listBody{
     position: relative;
-    word-wrap: break-word;
-    cursor: pointer;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 200px);
 }
 .cardsContainer{
     display: block;
     min-height: 0;
     overflow-x: hidden;
-    overflow-y: auto;
     flex: 1 1 auto;
 }
 .cardAndCheckBox{

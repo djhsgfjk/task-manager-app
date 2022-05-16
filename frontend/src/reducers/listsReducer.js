@@ -48,6 +48,13 @@ const sortListsAndCards = (lists) => {
 
 }
 
+const sortList = (list) => {
+	return {...list, cards: list.cards
+		.sort((a, b) => (a.index - b.index))}
+
+}
+
+
 const listsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case "REFRESH":
@@ -55,6 +62,13 @@ const listsReducer = (state = initialState, action) => {
 		case "UPDATE_PROJECT":
 			return action.payload
 		case "UPDATE_LIST":
+			return state.map((list) => {
+				if (list.id === action.payload.id)
+					return {...action.payload, cards:list.cards}
+				else
+					return list
+			})
+		case "UPDATE_LIST_AND_CARDS":
 			return state.map((list) => {
 				if (list.id === action.payload.id)
 					return action.payload

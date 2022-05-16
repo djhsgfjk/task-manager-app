@@ -45,56 +45,61 @@ class TasksList extends Component {
 						 {...provided.dragHandleProps}
 						 ref={provided.innerRef}
 					>
-						<Droppable droppableId={'' + listId} type='cards'>
-							{(provided) => (
-								<div className="listContent"
-									 ref={provided.innerRef}
-									 {...provided.droppableProps}
-								>
-									<div className="listHead">
-										<div className="listTitle">
-											<UpdateForm list id={listId} index={listIndex} text={title}/>
-										</div>
-										<div className="listBin"
-											 onPointerEnter={() => {
-												 this.setState({binVisibility: "visible"})
-											 }}
-											 onPointerLeave={() => {
-												 this.setState({binVisibility: "hidden"})
-											 }}
-											 onClick={this.deleteList}
-										>
-											<img
-												src={binClosed.default}
-												alt="bin_closed"
-												style={{
-													width: '100%',
-													right: 0, bottom: 0,
-													resize: "none",
-													visibility: this.state.binVisibility
-												}}
-											/>
-										</div>
-									</div>
-									<div
-										className="cardsContainer"
-										id={`cardsContainer_${listId}`}>
-										{cards.map((card, index) =>
-											<TaskCard
-												key={card.id}
-												cardId={card.id}
-												listId={listId}
-												cardIndex={index}
-												text={card.text}
-												done={card.done}
-											/>
-										)}
-										{provided.placeholder}
-									</div>
-									<ActionButton index={newCardIndex} listId={listId}/>
+						<div className="listContent">
+							<div className="listHead">
+								<div className="listTitle">
+									<UpdateForm list id={listId} index={listIndex} text={title}/>
 								</div>
-							)}
-						</Droppable>
+								<div className="listBin"
+									 onPointerEnter={() => {
+										 this.setState({binVisibility: "visible"})
+									 }}
+									 onPointerLeave={() => {
+										 this.setState({binVisibility: "hidden"})
+									 }}
+									 onClick={this.deleteList}
+								>
+									<img
+										src={binClosed.default}
+										alt="bin_closed"
+										style={{
+											width: '100%',
+											right: 0,
+											resize: "none",
+											visibility: this.state.binVisibility
+										}}
+									/>
+								</div>
+							</div>
+							<Droppable droppableId={'' + listId} type='cards'>
+								{(provided) => (
+									<div className="listBody"
+										 ref={provided.innerRef}
+										 {...provided.droppableProps}
+										style={{overflowY: "hidden"}}
+									>
+										<div
+											className="cardsContainer"
+											id={`cardsContainer_${listId}`}
+										>
+											{cards.map((card, index) =>
+												<TaskCard
+													key={card.id}
+													cardId={card.id}
+													listId={listId}
+													cardIndex={index}
+													text={card.text}
+													done={card.done}
+												/>
+											)}
+											{provided.placeholder}
+										</div>
+										<ActionButton index={newCardIndex} listId={listId}/>
+									</div>
+								)}
+							</Droppable>
+						</div>
+
 					</div>
 				)}
 			</Draggable>
