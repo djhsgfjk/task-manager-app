@@ -1,42 +1,4 @@
-// const newState =[
-//   {
-//     title: 'TO DO',
-//     id: 0,
-//     cards: [
-//       {
-//         id: 0,
-//         text: 'Watch all the videos',
-//       },
-//       {
-//         id: 1,
-//         text: 'Learn reducers',
-//       }
-//     ]
-//
-//   },
-//   {
-//     title: 'IN PROGRESS',
-//     id: 1,
-//     cards: [
-//       {
-//         id: 0,
-//         text: 'Learn js',
-//       },
-//       {
-//         id: 1,
-//         text: 'Learn react',
-//       },
-//       {
-//         id: 2,
-//         text: 'Build your task manager!',
-//       }
-//     ]
-//
-//   }
-// ];
-
 const initialState = []
-
 
 const sortListsAndCards = (lists) => {
 	return lists
@@ -57,7 +19,7 @@ const sortList = (list) => {
 
 const listsReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case "REFRESH":
+		case "UPLOAD_LISTS":
 			return sortListsAndCards(action.payload)
 		case "UPDATE_PROJECT":
 			return action.payload
@@ -68,6 +30,14 @@ const listsReducer = (state = initialState, action) => {
 				else
 					return list
 			})
+		case "SORT_LIST_BY_DUE":
+			return state.map((list) => {
+			if (list.id === action.payload.id)
+				return {...list, cards: action.payload.cards}
+			else
+				return list
+		})
+
 		case "UPDATE_LIST_AND_CARDS":
 			return state.map((list) => {
 				if (list.id === action.payload.id)

@@ -49,15 +49,16 @@ class ActionButton extends Component {
 	}
 
 	renderAddButton = () => {
+		const {projectButton} = this.props;
 		const {list} = this.props;
-		const buttonText = list ? "Add a list" : "Add a card";
+		const buttonText = projectButton ? "Добавить проект" : list ? "Добавить список" : "Добавить карточку";
 		return (
 			<div
-				className={list ? "listOpenFormButton": "cardOpenFormButton"}
+				className={projectButton ? "projectOpenFormButton" : list ? "listOpenFormButton" : "cardOpenFormButton"}
 				onClick={this.openForm}
 			>
 				<Icon>+</Icon>
-				<p>{buttonText}</p>
+				<p style={{font: "caption"}}>{buttonText}</p>
 			</div>
 		);
 	}
@@ -69,8 +70,7 @@ class ActionButton extends Component {
 
 	handleInputChange = (e) => {
 		const input = e.target.value;
-		const {list} = this.props;
-		const max_len = list ? 50 : 150
+		const max_len = 255
 		if (input.indexOf('\n') < 0 && input.length < max_len)
 			this.setState({input: input})
 	}
@@ -79,14 +79,23 @@ class ActionButton extends Component {
 		const input = this.state.input.trim()
 		if (typeof input != "string" || input === '')
 			return
-		const {list} = this.props
+
+		const {projectButton} = this.props;
+		const {list} = this.props;
 		const {index} = this.props
 		const {listId} = this.props
+		const {userId} = this.props;
+		const {projectId} = this.props;
 
 
-		const url = list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
-		const data = list ?
+
+		const url = projectButton ? "http://localhost:8000/api/projects/" : list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
+		const data = projectButton ? {
+				userId: userId,
+				title: input,
+			} : list ?
 			{
+				projectId: projectId,
 				index: index,
 				title: input,
 			} : {
@@ -98,7 +107,7 @@ class ActionButton extends Component {
 		axios.post(url, data)
 			.then(res => {
 				console.log(res.data);
-				list ? this.props.addList(res.data) : this.props.addCard(res.data)
+				projectButton ? this.props.addProjects({project: {id: res.data.id, title: res.data.title, lists: []}}) : list ? this.props.addList({projectId: projectId, list: res.data}) : this.props.addCard({projectId: projectId, listId: listId, card: res.data})
 				this.closeForm()
 				this.setState({input: undefined})
 			})
@@ -106,33 +115,36 @@ class ActionButton extends Component {
 	}
 
 	renderForm = () => {
+		const {projectButton} = this.props;
 		const {list} = this.props;
-		const placeHolder = list ? "Enter list title..." : "Enter the text of the card...";
-		const buttonTitle = list ? "Add list" : "Add card";
+		const placeHolder = projectButton ? "Введите название проекта" : list ? "Введите название списка..." : "Введите описание карточки...";
+		const buttonTitle = projectButton ? "Добавить проект" : list ? "Добавить список" : "Добавить карточку";
 
 		return (
-			<div className={list ? "listContainer" : null} ref={this.formRef}>
+			<div className={projectButton ? "projectContainer" : list ? "listContainer" : null} ref={this.formRef}>
 				<div id="actionButtonContainer">
 					<Card
-						sx={list ? {
+						sx={projectButton || list ? {
 							border: 1,
 							borderColor: "#3498DB",
 							borderWidth: 2.6,
 							boxShadow: 0,
 						} : {}}
 						style={{
-						minHeight: list ? 30 : 80,
-						padding: '6px 8px 2px',
-					}} >
+							minHeight: list ? 30 : 80,
+							padding: '6px 8px 2px',
+						}}>
 						<TextareaAutosize
 							className="textArea"
 							placeholder={placeHolder}
 							autoFocus={true}
 							value={this.state.input}
 							onChange={this.handleInputChange}
-							onKeyPress={(e) => {return this.handleKeyPress(e)}}
+							onKeyPress={(e) => {
+								return this.handleKeyPress(e)
+							}}
 							id="addFormTextArea"
-							style={list? {fontSize:"1.17em"}:{padding:10, width:"92%"}}
+							style={projectButton || list ? {fontSize: "1.17em", fontWeight: "bolder"} : {padding: 10, width: "92%"}}
 						/>
 					</Card>
 					<div className="formButtonGroup">
@@ -148,7 +160,10 @@ class ActionButton extends Component {
 						</Button>
 						<Close
 							style={{marginLeft: 8, cursor: "pointer",}}
-							onClick={()=>{this.closeForm(); this.setState({input: undefined});}}/>
+							onClick={() => {
+								this.closeForm();
+								this.setState({input: undefined});
+							}}/>
 					</div>
 				</div>
 			</div>);
@@ -158,10 +173,13 @@ class ActionButton extends Component {
 	}
 }
 
+
+
 const mapDispatchToProps = (dispatch) => {
 	return {
-		addList: (payload) => dispatch({ type: 'ADD_LIST' , payload: payload}),
-		addCard: (payload) => dispatch({ type: 'ADD_CARD' , payload: payload}),
+		addProjects: (payload) => dispatch({type: 'ADD_PROJECT', payload: payload}),
+		addList: (payload) => dispatch({type: 'ADD_LIST', payload: payload}),
+		addCard: (payload) => dispatch({type: 'ADD_CARD', payload: payload}),
 	}
 }
 

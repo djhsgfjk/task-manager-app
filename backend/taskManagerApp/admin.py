@@ -1,11 +1,15 @@
 from django.contrib import admin
-from .models import Card, List
+from .models import Card, List, Project
 
 class CardInline(admin.TabularInline):
     model = Card
 
-class TaskManagerAdmin(admin.ModelAdmin):
-    list_display = ("index", "title")
+class ListInline(admin.TabularInline):
+    model = List
     inlines = [CardInline]
 
-admin.site.register(List, TaskManagerAdmin)
+class TaskManagerAdmin(admin.ModelAdmin):
+    project_display = ("title")
+    inlines = [ListInline]
+
+admin.site.register(Project, TaskManagerAdmin)

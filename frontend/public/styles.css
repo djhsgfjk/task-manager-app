@@ -3,10 +3,27 @@
 }
 #project{
     font: caption;
+    display: block;
+    min-height: 0;
+    overflow: hidden;
+    flex: 1 1 auto;
 
 }
 #projectTitleContainer{
 
+}
+.lists{
+    position:relative;
+    min-height: 0;
+    overflow: hidden;
+    flex: 1 1 auto;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    padding-right: 8px;
+    max-width: calc(100vw - 100px);
+    overflow-x: visible;
+    height: calc(100vh - 72px);
 }
 #listsContainer{
     display: inline-flex;
@@ -14,7 +31,7 @@
 }
 .listContainer{
     display: inline-block;
-    width: 300px;
+    min-width: 300px;
     height: 100%;
     padding: 8px;
     margin-right: 8px;
@@ -22,17 +39,25 @@
     background-color: #EBECF0;
     border-radius: 3px;
 }
+.projectContainer{
+    display: inline-block;
+    width: 355px;
+    height: 100%;
+    padding: 8px;
+    border-radius: 3px;
+}
 .listHead {
     display: flex;
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-    height: 90px;
+    min-height: 60px;
 
 }
 .listTitle {
-    width: 85%;
-    padding-right: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
     position: relative;
     word-wrap: break-word;
 }
@@ -63,11 +88,7 @@
     min-height: 0;
     overflow-x: hidden;
     flex: 1 1 auto;
-}
-.cardAndCheckBox{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+
 }
 .cardContainer{
     word-wrap: break-word;
@@ -76,8 +97,28 @@
     position: relative;
     width: 100%;
 }
+.cardContainerForm{
+    word-wrap: break-word;
+    display: flex;
+    /*flex-direction: column;*/
+    position: absolute;
+    /*width: 50%;*/
+    height: 200px;
+    z-index:100;
+    top: 30%;
+    left: 35%;
+
+}
+.listContainerForm{
+    word-wrap: break-word;
+    margin-bottom: 8px;
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+
 #cardTextContainer {
-    width: 92%;
+    width: 100%;
     cursor: pointer;
 }
 #actionButtonContainer{
@@ -86,6 +127,19 @@
     justify-content: space-between;
     width: 100%!important;
 
+}
+.projectOpenFormButton {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 3px;
+    height: 36px;
+    padding-left: 10px;
+
+    opacity: 1;
+    color: white;
+    background-color: rgba(0,0,0,.15);
+    width: 360px;
 }
 .listOpenFormButton{
     display: inline-flex;
@@ -99,7 +153,7 @@
     opacity: 1;
     color: white;
     background-color: rgba(0,0,0,.15);
-    width: 306px;
+    min-width: 306px;
 }
 .cardOpenFormButton{
     display: inline-flex;
@@ -134,25 +188,145 @@
     letter-spacing: 0.01071em;
     margin: 0;
 }
-#updateListFormContainer{
+.updateListFormContainer{
     position: relative;
-    margin-bottom: 10px;
-    margin-top: 7px;
+    /*margin-bottom: 10px;*/
+    /*margin-top: 7px;*/
 }
-#updateCardFormContainer {
-    display: block;
-    position: relative;
-}
-#binContainer {
-    position: fixed;
-    right: 0;
-    bottom: 1vh;
-    cursor: pointer;
-    height: 10vh;
-    width: 10vh;
 
-    filter: invert(49%) sepia(99%) saturate(651%) hue-rotate(177deg) brightness(89%) contrast(92%);
-}
+/*#binContainer {*/
+/*    position: fixed;*/
+/*    right: 0;*/
+/*    bottom: 1vh;*/
+/*    cursor: pointer;*/
+/*    height: 10vh;*/
+/*    width: 10vh;*/
+
+/*    filter: invert(49%) sepia(99%) saturate(651%) hue-rotate(177deg) brightness(89%) contrast(92%);*/
+/*}*/
 body {
     background-color: #AED6F1;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+}
+
+.updateCardFormContainer {
+    display: block;
+    position: relative;
+    padding: 10px;
+    word-wrap: break-word;
+}
+
+.overlay {
+    position:absolute;
+    width:100%;
+    height:100%;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);;
+    z-index:2;
+}
+.overflow {
+    overflow: hidden;
+}
+
+.cardFormButtons{
+    display: flex;
+    flex-direction: column;
+    margin-left: 4px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 200px;
+}
+.listFormButtons{
+    display: flex;
+    flex-direction: column;
+    margin-left: 4px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: white;
+    /*border-color: ;*/
+    border: 2px #767678;
+    border-style: solid;
+    /*border: #767678;*/
+    z-index: 1;
+    border-radius: 3px;
+    height: 200px;
+    position: absolute;
+    left: 300px;
+    width: 200px;
+}
+
+.dueContainer{
+    float: left;
+    margin-bottom: 8px;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+}
+
+a:hover {
+    color: #CE242B;
+}
+
+.navigation{
+    /*z-index: 2;*/
+    /*position: absolute;*/
+    border-radius: 3px;
+    height: 100vh;
+    margin-right: 8px;
+    padding-left: 8px;
+    overflow: hidden;
+    position: relative;
+    min-width: 30px;
+    font: caption;
+
+}
+
+.profile {
+    margin: 8px;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border-radius: 3px;
+    padding: 20px;
+    background-color: white;
+    margin-top: calc(50vh - 125px);
+    margin-left: calc(50vw - 139px);
+    align-items: center;
+}
+
+.signupForm {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border-radius: 3px;
+    padding: 20px;
+    background-color: white;
+    margin-top: calc(50vh - 190px);
+    margin-left: calc(50vw - 139px);
+    align-items: center;
+}
+
+.projectsMenu{
+    display: block;
+    min-height: 0;
+    overflow-x: hidden;
+    flex: 1 1 auto;
+}
+
+.menuContainer{
+    position: relative;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    padding-right: 8px;
+    max-height: calc(100vh - 100px);
 }

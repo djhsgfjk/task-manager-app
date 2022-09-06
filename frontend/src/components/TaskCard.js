@@ -1,48 +1,43 @@
 import React from "react";
 import {Component} from "react";
-import UpdateForm from "./UpdateForm";
-import CardContent from '@mui/material/CardContent';
-import Card from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import {connect} from "react-redux";
 import {Draggable} from "react-beautiful-dnd";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import {Button, TextareaAutosize} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import calendarImg from "../calendar.png"
+import calendar2Img from "../calendar2.png"
 
-class TaskCard extends Component{
 
-	handeCheckChange = (e) => {
-		const {cardId} = this.props;
+class TaskCard extends Component {
+
+	constructor(props) {
+		super(props);
+	}
+
+	openForm = async () => {
+		const {id} = this.props;
 		const {listId} = this.props;
-		const {cardIndex} = this.props;
+		const {index} = this.props;
 		const {text} = this.props;
-		const done = e.target.checked;
-
-		const url = `http://localhost:8000/api/cards/${cardId}/`
-		const data = {
-			listId: listId,
-			index: cardIndex,
-			text: text,
-			done: done,
-		}
-
-		axios.put(url, data)
-			.then(res => {
-				console.log(res.data);
-				this.props.updateCard(res.data)
-			})
-			.catch(err => console.log(err))
-
+		const {done} = this.props;
+		const {due} = this.props;
+		await this.props.showModal({id: id, listId: listId, index: index, text: text, done: done, due: due});
+		const e = document.getElementById("updateFormTextArea")
+		e.select()
 	}
 
 	render = () => {
-		const {cardId} = this.props;
-		const {listId} = this.props;
-		const {cardIndex} = this.props;
-		const {text} = this.props;
 		const {done} = this.props;
+		const {id} = this.props;
+		const {index} = this.props;
+		const {text} = this.props;
+		const {due} = this.props;
 
 		return (
-			<Draggable draggableId={''+cardId} index={cardIndex} type='cards'>
+			<Draggable draggableId={''+id} index={index} type='cards'>
 				{(provided) => (
 					<div
 						className="cardContainer"
@@ -50,20 +45,20 @@ class TaskCard extends Component{
 						{...provided.dragHandleProps}
 						ref={provided.innerRef}
 					>
-						<Card sx={{cursor: "default"}}>
-							<CardContent className="cardAndCheckBox">
-								<UpdateForm
-									id={cardId}
-									listId={listId}
-									index={cardIndex}
-									text={text}
-									done={done}/>
-								<Checkbox
-									sx={{padding:0, color:"#3498DB", '&.Mui-checked': {color: "#3498DB",},}}
-									checked={done}
-									onChange={this.handeCheckChange}/>
-							</CardContent>
-						</Card>
+						<div className="cardContainer">
+							<Card sx={{cursor: "default"}}>
+								<CardContent>
+									<div id="cardTextContainer" onClick={this.openForm}>
+										<Typography variant="body2" style={done ? {
+											padding: 10,
+											wordWrap: "break-word",
+											textDecoration: "line-through"
+										} : {padding: 10, wordWrap: "break-word"}}>{text}</Typography>
+									</div>
+									{due ? <div className={"dueContainer"} style={{alignItems:"center", display:"flex"}}><img src={calendarImg} alt={""} width={"20px"}/>{due.slice(8,10)}.{due.slice(5,7)}</div> : null}
+								</CardContent>
+							</Card>
+						</div>
 					</div>
 				)}
 			</Draggable>
@@ -73,7 +68,8 @@ class TaskCard extends Component{
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		updateCard: (payload) => dispatch({ type: 'UPDATE_CARD' , payload: payload}),
+		showModal: (payload) => dispatch({type: 'SHOW_MODAL', payload: payload}),
+		hideModal: () => dispatch({type: 'HIDE_MODAL'}),
 	}
 }
 
