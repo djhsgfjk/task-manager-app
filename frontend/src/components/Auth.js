@@ -138,7 +138,7 @@ class Auth extends Component {
 			const {formEmail} = this.state;
 			const {formPassword} = this.state;
 			const {formPassword2} = this.state;
-			const logInButton = "Войти в аккаунт"
+			const logInButton = "Войти"
 
 			return (
 				<div className="login">
@@ -218,7 +218,7 @@ class Auth extends Component {
 		else {
 			const {formUsername} = this.state;
 			const {formPassword} = this.state;
-			const signUpButton = "Нет аккаунта? Зарегистрируйся!";
+			const signUpButton = "Зарегистрироваться";
 
 			return (
 				<div className="login">

@@ -51,7 +51,7 @@ User = get_user_model()
 
 
 class Project(models.Model):
-    userId = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE, null=True, blank=True)
+    userId = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE, null=False, blank=False)
     title = models.CharField(max_length=255)
 
 

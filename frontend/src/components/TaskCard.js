@@ -7,8 +7,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Button, TextareaAutosize} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import calendarImg from "../calendar.png"
-import calendar2Img from "../calendar2.png"
+import calendarImg from "../images/calendar.png"
+import calendar2Img from "../images/calendar2.png"
 
 
 class TaskCard extends Component {
@@ -52,10 +52,11 @@ class TaskCard extends Component {
 										<Typography variant="body2" style={done ? {
 											padding: 10,
 											wordWrap: "break-word",
-											textDecoration: "line-through"
+											textDecoration: "line-through",
+											color: "#767678",
 										} : {padding: 10, wordWrap: "break-word"}}>{text}</Typography>
 									</div>
-									{due ? <div className={"dueContainer"} style={{alignItems:"center", display:"flex"}}><img src={calendarImg} alt={""} width={"20px"}/>{due.slice(8,10)}.{due.slice(5,7)}</div> : null}
+									{due ? <div className={"dueContainer"} style={{alignItems:"center", display:"flex"}}><img src={calendarImg} alt={""} width={"18px"}/>{due.slice(8,10)}.{due.slice(5,7)}</div> : null}
 								</CardContent>
 							</Card>
 						</div>

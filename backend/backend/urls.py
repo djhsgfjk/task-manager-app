@@ -2,10 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from taskManagerApp import views
 from rest_framework import routers
-# from rest_framework_simplejwt.views import (
-#     TokenObtainPairView,
-#     TokenRefreshView,
-# )
+
 
 router = routers.DefaultRouter()
 router.register(r'projects', views.ProjectView, 'project')
@@ -21,5 +18,3 @@ urlpatterns = [
     path('api/logout', views.logout_view, name='logout_view'),
     path('api/signup', views.signup_view, name='signup_view'),
 ]
-
-# urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

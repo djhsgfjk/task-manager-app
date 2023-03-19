@@ -22,6 +22,7 @@ class Auth extends Component {
 
 	renderMenu() {
 		const {username} = this.props.user;
+		const {id} = this.props.user;
 		const {projects} = this.props;
 		const {navOpened} = this.props.currentProject;
 		const logoutButton = "Выйти";
@@ -63,7 +64,7 @@ class Auth extends Component {
 								}
 							)}
 						</div>
-						<ActionButton projectButton/>
+						<ActionButton projectButton userId={id} />
 							</div>
 					</div>) : null}
 			</div>

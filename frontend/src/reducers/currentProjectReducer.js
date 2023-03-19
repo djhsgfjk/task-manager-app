@@ -7,7 +7,7 @@ const currentProjectReducer = (state = {navOpened: true}, action) => {
 				navOpened: true,
 			}
 		case "LOGOUT":
-			return {};
+			return {navOpened: true};
 		case "CHANGE_NAV":
 			return {...state, navOpened: action.payload}
  		default:

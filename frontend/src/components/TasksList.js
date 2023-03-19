@@ -13,8 +13,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Button, TextareaAutosize} from "@mui/material";
 import {Close} from "@mui/icons-material";
-import deleteImg from "../delete.png";
-import sortImg from "../sort.png"
+import deleteImg from "../images/delete.png";
+import sortImg from "../images/sort.png"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 

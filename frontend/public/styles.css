@@ -32,6 +32,7 @@
 .listContainer{
     display: inline-block;
     min-width: 300px;
+    max-width: 300px;
     height: 100%;
     padding: 8px;
     margin-right: 8px;

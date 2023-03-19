@@ -5,9 +5,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import {Button, TextareaAutosize} from "@mui/material";
 import {connect} from "react-redux";
-import doneImg from "../done.png"
-import undoneImg from "../undone.png"
-import deleteImg from "../delete.png"
+import doneImg from "../images/done.png"
+import undoneImg from "../images/undone.png"
+import deleteImg from "../images/delete.png"
 import {Close} from "@mui/icons-material";
 import {makeStyles} from "@mui/material";
 import {TextField} from "@mui/material";
@@ -53,7 +53,7 @@ class UpdateCard extends Component {
 		const done = this.state.isDone;
 
 		const lastDue = this.props.card.due;
-		const due = this.state.selectedDate;
+		const due = this.state.selectedDate ? this.state.selectedDate : null;
 
 		if (input === this.props.text && lastDone === done && lastDue === due) {
 			this.closeForm()
@@ -134,7 +134,8 @@ class UpdateCard extends Component {
 									style={done ? {
 										padding: 4.5,
 										width: "90%",
-										textDecoration: "line-through"
+										textDecoration: "line-through",
+										color: "#767678",
 									} : {padding: 4.5, width: "90%"}}
 									placeholder={placeholder}
 									autoFocus={true}

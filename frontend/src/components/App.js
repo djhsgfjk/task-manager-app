@@ -34,7 +34,7 @@ class App extends Component {
 		return user.id ? (
 			<div className="app" style={{display: "flex",}}>
 					<Navigation/>
-				{currentProject.id ? <Project/> :  <div style={{font: "caption", fontSize: 20, textAlign: "center", margin: 8, marginTop: 20}}>Начните работу, открыв проект в меню слева!</div>}
+				{currentProject.id ? <Project/> :  null}
 			</div>
 		) : (
 			<div className={"app"}>

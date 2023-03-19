@@ -14,8 +14,6 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
 
-
-
 def logout_view(request):
     logout(request)
     return Response({"success": "Logged out"}, status=200)
@@ -59,38 +57,6 @@ def issue_token(request: Request):
         return Response(TokenSeriazliser(token).data)
     else:
         return Response(serializer.errors, status=400)
-
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def logout(self, request: Request):
-#     try:
-#         Token.objects.filter(owner=self.request.user).delete()
-#     except (AttributeError, ObjectDoesNotExist):
-#         pass
-#     logout(request)
-#     return Response({"success": "Successfully logged out."}, status=200)
-
-
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
-# def login(request: Request):
-#     serializer = LoginRequestSerializer(data=request.data)
-#     if serializer.is_valid():
-#         authenticated_user = authenticate(**serializer.validated_data)
-#         if authenticated_user is not None:
-#             login(request, authenticated_user)
-#             return Response({'status': 'Success'})
-#         else:
-#             return Response({'error': 'Invalid credentials'}, status=403)
-#     else:
-#         return Response(serializer.errors, status=400)
-
-# @api_view()
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([JWTAuthentication])
-# def user(request: Request):
-#     return Response(UserSerializer(request.user).data)
-
 
 class CardView(viewsets.ModelViewSet):
     serializer_class =CardSerializer
