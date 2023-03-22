@@ -91,7 +91,7 @@ class ActionButton extends Component {
 
 		const url = projectButton ? "http://localhost:8000/api/projects/" : list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
 		const data = projectButton ? {
-				userId: userId,
+				usersId: [userId],
 				title: input,
 			} : list ?
 			{

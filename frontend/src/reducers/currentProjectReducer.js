@@ -3,6 +3,7 @@ const currentProjectReducer = (state = {navOpened: true}, action) => {
 		case "OPEN_PROJECT":
 			return {
 				id: action.payload.id,
+				users: action.payload.users,
 				title: action.payload.title,
 				navOpened: true,
 			}

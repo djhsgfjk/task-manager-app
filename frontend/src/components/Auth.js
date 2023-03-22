@@ -43,6 +43,7 @@ class Auth extends Component {
 						username: res.data.username,
 						email: res.data.email,
 					});
+					console.log(res.data.projects)
 					this.props.uploadProjects(res.data.projects);
 					this.setState({signIn: false})
 				})

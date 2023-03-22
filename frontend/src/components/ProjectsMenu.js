@@ -8,8 +8,9 @@ class ProjectsMenu extends Component {
 	openProject = () => {
 		const {id} = this.props;
 		const {title} = this.props;
+		const {users} = this.props;
 
-		this.props.openProject({id: id, title: title,})
+		this.props.openProject({id: id, title: title, users:users})
 
 		// window.location.assign('http://localhost:3000/project/');
 	}

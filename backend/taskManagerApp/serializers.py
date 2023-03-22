@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Card, List, Project, User
 from rest_framework.serializers import Serializer, ModelSerializer, CharField
 from rest_framework.authtoken.models import Token
+from drf_writable_nested import WritableNestedModelSerializer
 
 class IssueTokenRequestSerializer(Serializer):
     model = User
@@ -49,21 +50,27 @@ class ListInProjectSerializer(serializers.ModelSerializer):
         fields = ('id', 'index', 'title', 'cards')
 
 
-class ProjectSerializer(serializers.ModelSerializer):
-
+class ProjectSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     lists = ListInProjectSerializer(many=True, read_only=False, required=False)
 
     class Meta:
         model = Project
-        fields= ('userId', 'id', 'title', 'lists')
+        fields = ('id', 'users', 'title', 'lists')
+
+
+class UserInProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
+
 
 class ProjectInUserSerializer(serializers.ModelSerializer):
-
     lists = ListInProjectSerializer(many=True, read_only=False, required=False)
+    users = UserInProjectSerializer(many=True, read_only=True)
 
     class Meta:
-        model = List
-        fields = ('id', 'title', 'lists')
+        model = Project
+        fields = ('id', 'users', 'title', 'lists')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -73,4 +80,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'projects')
-

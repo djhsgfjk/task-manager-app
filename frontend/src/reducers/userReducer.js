@@ -23,13 +23,7 @@ const userReducer = (state = {}, action) => {
 				id: action.payload.id,
 				username: action.payload.username,
 				email: action.payload.email,
-				// projects: action.payload.projects,
 			};
-		// case "ADD_PROJECT":
-		// 	return {
-		// 		...state,
-		// 		projects: [...state.projects, action.payload],
-		// 	}
 		case "LOGOUT":
 			return {};
 		default:

@@ -59,6 +59,7 @@ class Auth extends Component {
 											key={project.id}
 											id={project.id}
 											title={project.title}
+											users = {project.users}
 										/>
 									)
 								}

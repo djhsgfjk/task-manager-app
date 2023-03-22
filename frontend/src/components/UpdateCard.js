@@ -114,7 +114,7 @@ class UpdateCard extends Component {
 		);
 	}
 
-	renderForm = () => {
+	render = () => {
 		const done = this.state.isDone;
 		const placeholder = "Введите описание карточки...";
 		const doneButton = "Отметить как выполненное";
@@ -200,13 +200,6 @@ class UpdateCard extends Component {
 				</div>
 			</div>
 		);
-	}
-
-	render = () => {
-		// const {modalOn} = this.props;
-		// return modalOn ? this.renderForm() : null;
-		return this.renderForm();
-
 	}
 
 	deleteCardFromList = () => {

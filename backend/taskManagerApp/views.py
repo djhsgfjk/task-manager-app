@@ -34,11 +34,6 @@ def signup_view(request: Request):
     serializer = SignUpSeriazliser(data=request.data)
     if serializer.is_valid():
         user = User.objects.create_user(**serializer.validated_data)
-        # authenticated_user = authenticate(**user.validated_data)
-        # try:
-        #     token = Token.objects.get(user=authenticated_user)
-        # except Token.DoesNotExist:
-        #     token = Token.objects.create(user=authenticated_user)
         return Response({'ok': True})
     else:
         return Response(serializer.errors, status=400)
