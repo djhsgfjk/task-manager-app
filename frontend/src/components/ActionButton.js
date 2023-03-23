@@ -102,10 +102,12 @@ class ActionButton extends Component {
                 return data[0]
             }) : undefined
 
+        console.log(userId);
+        console.log(user);
 
         const url = projectUser ? `http://localhost:8000/api/projects/${projectId}/` : projectButton ? "http://localhost:8000/api/projects/" : list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
         const data = projectButton ? {
-            usersId: [userId],
+            users: [userId],
             title: input,
         } : list ?
             {
@@ -148,6 +150,7 @@ class ActionButton extends Component {
 
 
         } else {
+            console.log(data)
             axios.post(url, data)
                 .then(res => {
                     console.log(res.data);
@@ -174,7 +177,7 @@ class ActionButton extends Component {
         const {projectUser} = this.props;
         const {error} = this.state;
         const {errorMassage} = this.state;
-        const placeHolder = projectUser ? "Введите имя пользователя или email" : projectButton ? "Введите название проекта" : list ? "Введите название списка..." : "Введите описание карточки...";
+        const placeHolder = projectUser ? "Введите имя пользователя или email..." : projectButton ? "Введите название проекта..." : list ? "Введите название списка..." : "Введите описание карточки...";
         const buttonTitle = projectUser ? "Добавить пользователя" : projectButton ? "Добавить проект" : list ? "Добавить список" : "Добавить карточку";
 
         return (
