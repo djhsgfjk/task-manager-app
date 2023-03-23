@@ -10,10 +10,13 @@ import {Droppable} from "react-beautiful-dnd";
 import moveElementInArray from "../additionalFunctions/moveElementInArray";
 import {Close} from "@mui/icons-material";
 import ProjectUsers from "./ProjectUsers"
+import Card from "@mui/material/Card";
+import {Button, TextareaAutosize} from "@mui/material";
 
 class Project extends Component {
     constructor(props) {
         super(props);
+        this.state = {formOpen: false}
     }
 
 
@@ -143,10 +146,137 @@ class Project extends Component {
         }
     }
 
+    openForm = async () => {
+        const {currentProject} = this.props;
+        const title = this.props.projects.find((project) => (project.id === currentProject.id)).title;
+        await this.setState({formOpen: true, input: title});
+        const e = document.getElementById("updateFormTextArea")
+        e.select()
+
+        document.addEventListener('click', this.handleClickOutside);
+
+    }
+
+    closeForm = () => {
+        document.removeEventListener('click', this.handleClickOutside);
+        this.setState({formOpen: false, input: this.props.title});
+    }
+
+    handleClickOutside = (e) => {
+        console.log('outside')
+        const elem = document.querySelector('.projectTitleEditForm')
+        console.log()
+        if (!(elem.contains(e.target)) && !Array.from(e.target.classList).includes('projectTitle')) {
+            this.closeForm()
+        }
+    }
+
+    handleKeyPress = (e) => {
+        if (e.key === "Enter")
+            this.handleSubmit()
+    }
+
+    handleInputChange = (e) => {
+        const input = e.target.value
+        const max_len = 15
+        if (input.indexOf('\n') < 0 && input.length < max_len)
+            this.setState({input: input})
+    }
+
+    handleSubmit = () => {
+        const input = this.state.input.trim()
+        if (typeof input != "string" || input === '') {
+            return
+        }
+        if (input === this.props.text) {
+            this.closeForm()
+            return
+        }
+
+        const {currentProject} = this.props;
+
+        const url = `http://localhost:8000/api/projects/${currentProject.id}/`
+        const data =
+            {
+                projectId: currentProject.id,
+                title: input,
+            }
+
+        axios.put(url, data)
+            .then(res => {
+                console.log(res.data);
+                this.props.updateProjectTitle({projectId: res.data.id, title: res.data.title})
+                this.closeForm()
+            })
+            .catch(err => console.log(err))
+    }
+
+
+    renderForm = () => {
+        const placeHolder = "Введите название проекта...";
+        const buttonTitle = "Сохранить";
+
+        return (
+            <div className={'projectTitleEditForm'} style={{display: "flex",}}>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'}}>
+                    <Card
+                        sx={{
+                            border: 1,
+                            borderColor: "#3498DB",
+                            borderWidth: 2.6,
+                            boxShadow: 0,
+                            width: "280px",
+                        }}
+                        style={{
+                            minHeight: 30,
+                            padding: '6px 8px 2px',
+                        }}>
+                        <TextareaAutosize
+                            className="textArea"
+                            placeholder={placeHolder}
+                            autoFocus={true}
+                            value={this.state.input}
+                            onChange={this.handleInputChange}
+                            onKeyPress={(e) => {
+                                return this.handleKeyPress(e)
+                            }}
+                            id="updateFormTextArea"
+                            style={{fontSize: "1.17em", fontWeight: "bolder",}}
+                        />
+                    </Card>
+                    <div style={{
+                        marginLeft: '8px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
+                        <Button
+                            variant="contained"
+                            style={{
+                                color: "white",
+                                backgroundColor: "#3498DB",
+                            }}
+                            onClick={this.handleSubmit}
+                        >
+                            {buttonTitle}
+                        </Button>
+                        <Close
+                            style={{marginLeft: 8, cursor: "pointer",}}
+                            onClick={this.closeForm}/>
+                    </div>
+                </div>
+            </div>);
+    }
+
     render() {
         const {user} = this.props;
         const {currentProject} = this.props;
+        const title = this.props.projects.find((project) => (project.id === currentProject.id)).title;
         const lists = this.props.projects.find((project) => (project.id === currentProject.id)).lists;
+        const users = this.props.projects.find((project) => (project.id === currentProject.id)).users;
         console.log(lists)
 
         const newListIndex = lists.length;
@@ -161,13 +291,18 @@ class Project extends Component {
         return (
             <div id="project">
                 <div className="projectTitleContainer">
-                    <h2>{currentProject.title}</h2>
-                    <ProjectUsers
-                        userId = {user.id}
-                        users={currentProject.users}
-                        projectId={currentProject.id}
-                        title={currentProject.title}
-                    />
+
+                    {this.state.formOpen ? <div className="projectHead"> {this.renderForm()} </div> :
+                        <div className="projectHead">
+                                <h2 className={'projectTitle'} onClick={this.openForm}>{title}</h2>
+                            <ProjectUsers
+                                userId={user.id}
+                                users={users}
+                                projectId={currentProject.id}
+                                title={title}
+                            />
+                        </div>}
+
                 </div>
                 <div className={"lists"}>
                     <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
@@ -210,9 +345,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         updateProject: (payload) => dispatch({type: 'UPDATE_PROJECT', payload: payload}),
+        updateProjectTitle: (payload) => dispatch({type: 'UPDATE_TITLE', payload: payload}),
         updateListAndCards: (payload) => dispatch({type: 'UPDATE_LIST_AND_CARDS', payload: payload}),
         deleteCard: (payload) => dispatch({type: 'DELETE_CARD', payload: payload}),
         hideModal: () => dispatch({type: 'HIDE_MODAL'}),
+
     }
 }
 

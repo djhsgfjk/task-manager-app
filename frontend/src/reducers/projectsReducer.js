@@ -23,6 +23,22 @@ const projectsReducer = (state = [], action) => {
 				})
 		case "ADD_PROJECT":
 			return [...state, action.payload.project]
+		case "UPDATE_USERS":
+			return state.map(
+				(project) => {
+					if (project.id === action.payload.projectId)
+						return {...project, users: action.payload.users};
+					else
+						return project;
+				})
+		case "UPDATE_TITLE":
+			return state.map(
+				(project) => {
+					if (project.id === action.payload.projectId)
+						return {...project, title: action.payload.title};
+					else
+						return project;
+				})
 		case "UPDATE_PROJECT":
 			return state.map(
 				(project) => {

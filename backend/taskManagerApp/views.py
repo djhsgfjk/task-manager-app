@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .serializers import CardSerializer, ListSerializer, ProjectSerializer, SignUpSeriazliser
+from .serializers import CardSerializer, ListSerializer, ProjectSerializer, SignUpSeriazliser, UserInProjectSerializer
 from .models import Card, List, Project, User
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -12,6 +12,9 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from rest_framework import generics
+from rest_framework import filters
+
 
 
 def logout_view(request):
@@ -64,3 +67,16 @@ class ListView(viewsets.ModelViewSet):
 class ProjectView(viewsets.ModelViewSet):
     serializer_class =ProjectSerializer
     queryset = Project.objects.all()
+
+class UserSearchView(generics.ListAPIView):
+    serializer_class = UserInProjectSerializer
+    # queryset = User.objects.all()
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['username', 'email']
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        usernameOrEmail = self.request.query_params.get('input')
+        if usernameOrEmail is not None:
+            queryset = queryset.filter(username=usernameOrEmail) or queryset.filter(email=usernameOrEmail)
+        return queryset

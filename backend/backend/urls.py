@@ -17,4 +17,5 @@ urlpatterns = [
     path('api/login', views.issue_token, name='issue_token'),
     path('api/logout', views.logout_view, name='logout_view'),
     path('api/signup', views.signup_view, name='signup_view'),
+    path('api/user_search', views.UserSearchView.as_view(), name='user_search'),
 ]

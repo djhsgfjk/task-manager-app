@@ -17,7 +17,7 @@
 .lists{
     position:relative;
     min-height: 0;
-    overflow: hidden;
+    overflow-y: hidden;
     flex: 1 1 auto;
     width: inherit;
     display: flex;
@@ -358,4 +358,20 @@ a:hover {
     align-items: center;
     width: 50%;
     margin: 15% auto;
+}
+
+.projectContainer {
+    width: 100%;
+}
+
+.projectHead {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.projectHead h2{
+    margin: 0;
 }

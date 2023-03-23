@@ -2,9 +2,20 @@ import React from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupIcon from '@mui/icons-material/Group';
 import {Close} from "@mui/icons-material";
-import {Card, CardContent, List, ListItem, IconButton, ListItemText, Typography} from "@mui/material";
+import {
+    Card,
+    CardContent,
+    List,
+    ListItem,
+    IconButton,
+    ListItemText,
+    Typography,
+    Icon,
+    TextareaAutosize, Button
+} from "@mui/material";
 import axios from "axios";
 import {connect} from "react-redux";
+import ActionButton from "./ActionButton";
 
 
 class ProjectUsers extends React.Component {
@@ -28,7 +39,7 @@ class ProjectUsers extends React.Component {
     }
 
     closeModal = (index) => {
-        this.setState({opened: false});
+        this.setState({opened: false, addUserFromOpened: false});
         document.removeEventListener('click', this.handleClickOutside);
     }
 
@@ -36,7 +47,7 @@ class ProjectUsers extends React.Component {
         console.log(e.target.closest('.user-list-item'))
 
         const {projectId} = this.props;
-        const {users} = this.props;
+        const users = this.props.projects.find((project) => (project.id === projectId)).users;
         const {title} = this.props;
 
         const url = `http://localhost:8000/api/projects/${projectId}/`
@@ -51,19 +62,21 @@ class ProjectUsers extends React.Component {
         axios.put(url, data)
             .then(res => {
                 console.log(res.data);
-                this.props.updateProject(data)
-                // console.log(e.target.closest('.user-list-item'))
-                e.target.closest('.user-list-item').remove();
+                this.props.updateProjectUsers({projectId: projectId, users: users.filter(({id}) => id !== userId)})
+                // e.target.closest('.user-list-item').remove();
             })
             .catch(err => console.log(err))
     }
 
-
     render() {
-        const {users} = this.props;
+        const {projectId} = this.props;
+        const users = this.props.projects.find((project) => (project.id === projectId)).users;
+        console.log(users)
         const {opened} = this.state;
-        const title = 'Участники проекта'
+        const modalTitle = 'Участники проекта'
         const {userId} = this.props;
+        const {title} = this.props;
+
 
         return <div>
             <IconButton className={'users-modal-btn'} aria-label="users" onClick={this.openModal}>
@@ -76,6 +89,7 @@ class ProjectUsers extends React.Component {
                         overflow: 'auto',
                         borderRadius: "6px",
                         boxShadow: "rgba(0, 0, 0, 0.35) 0 5px 15px",
+                        padding: '8px',
                     }}>
                         <CardContent sx={{display: 'flex',
                             justifyContent: 'flex-end',
@@ -86,10 +100,8 @@ class ProjectUsers extends React.Component {
                                 alignItems: 'center',
                                 width: '100%',
                                 justifyContent: 'space-between',
-                                paddingTop: '8px',
-                                paddingButton: '8px',
                             }}>
-                                <h3 style={{margin: 0}}>{title}</h3>
+                                <h3 style={{margin: 0}}>{modalTitle}</h3>
                                 <Close
                                     style={{marginLeft: "8px", cursor: "pointer",}}
                                     onClick={this.closeModal}/>
@@ -122,7 +134,7 @@ class ProjectUsers extends React.Component {
                                     </ListItem>
                                 ))}
                             </List>
-
+                            <ActionButton projectUser users={users} title={title} projectId={projectId}  />
                         </CardContent>
                     </Card>
                 </div>
@@ -131,10 +143,14 @@ class ProjectUsers extends React.Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {projects: state.projects}
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateProject: (payload) => dispatch({type: 'UPDATE_PROJECT', payload: payload}),
+        updateProjectUsers: (payload) => dispatch({type: 'UPDATE_USERS', payload: payload}),
     }
 }
 
-export default connect(null, mapDispatchToProps)(ProjectUsers);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectUsers);
