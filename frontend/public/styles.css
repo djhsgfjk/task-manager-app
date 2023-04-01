@@ -1,5 +1,5 @@
 #root{
-
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
 }
 #project{
     font: caption;
@@ -373,4 +373,11 @@ a:hover {
 
 .projectHead h2{
     margin: 0;
+}
+
+.error {
+    color: red;
+    word-wrap: normal;
+    width: 220px;
+    text-align: center;
 }

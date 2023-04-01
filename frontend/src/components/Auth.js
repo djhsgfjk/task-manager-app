@@ -3,7 +3,6 @@ import {Component} from 'react';
 import {connect} from "react-redux";
 import {Button} from "@mui/material";
 import axios from "axios";
-import ProjectsMenu from "./ProjectsMenu";
 import TextField from '@mui/material/TextField';
 
 class Auth extends Component {
@@ -24,7 +23,6 @@ class Auth extends Component {
 				'/api/user',
 				{
 					headers: {
-						// 'Content-Type': 'application/json;charset=utf-8',
 						'Authorization': `Token ${token}`,
 					},
 				})
@@ -57,6 +55,12 @@ class Auth extends Component {
 		}
 	}
 
+	EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
+	isEmailValid = (value) => {
+		return this.EMAIL_REGEXP.test(value);
+	}
+
 	signUp = (e) => {
 		e.preventDefault();
 
@@ -65,8 +69,15 @@ class Auth extends Component {
 		const {formPassword} = this.state;
 		const {formPassword2} = this.state;
 
-		if (formPassword !== formPassword2)
+		if (formPassword !== formPassword2) {
+			this.setState({error: 'Ошибка: пароли не совпадают'})
 			return
+		}
+
+		if (!this.isEmailValid(formEmail)) {
+			this.setState({error: 'Ошибка: проверьте правильность введенного адреса почты'})
+			return
+		}
 
 		this.setState({loading: true});
 
@@ -95,7 +106,7 @@ class Auth extends Component {
 			})
 			.catch(error => {
 				console.log(error)
-				this.setState({error: 'Ошибка'})
+				this.setState({error: 'Ошибка: логин и(или) почта уже используются другим пользователем'})
 			})
 	}
 
@@ -127,7 +138,7 @@ class Auth extends Component {
 			})
 			.catch(error => {
 				console.log(error)
-				this.setState({error: 'Ошибка'})
+				this.setState({error: 'Ошибка: неверный логин или пароль'})
 			})
 	}
 
@@ -152,6 +163,7 @@ class Auth extends Component {
 							}}
 							variant="outlined"
 							style={{margin: 8}}
+							required
 						/>
 						<TextField
 							type="text" name="email" value={formEmail}
@@ -162,6 +174,7 @@ class Auth extends Component {
 							}}
 							variant="outlined"
 							style={{margin: 8}}
+							required
 						/>
 						<TextField
 							type="password" name="password" value={formPassword}
@@ -172,6 +185,7 @@ class Auth extends Component {
 							}}
 							variant="outlined"
 							style={{margin: 8}}
+							required
 						/>
 						<TextField
 							type="password" name="password2" value={formPassword2}
@@ -182,8 +196,9 @@ class Auth extends Component {
 							}}
 							variant="outlined"
 							style={{margin: 8}}
+							required
 						/>
-						{error ? <div>{error}</div> :null}
+						{error ? <div className={'error'}>{error}</div> :null}
 						<Button
 							variant="contained"
 							style={{
@@ -234,6 +249,7 @@ class Auth extends Component {
 							}}
 							variant="outlined"
 							style={{margin: 8}}
+							required
 						/>
 						<TextField
 							type="password"
@@ -246,8 +262,9 @@ class Auth extends Component {
 							}}
 							variant="outlined"
 							style={{margin: 8}}
+							required
 						/>
-						{error ? <div>{error}</div> :null}
+						{error ? <div className={'error'}>{error}</div> :null}
 						<Button
 							variant="contained"
 							style={{
