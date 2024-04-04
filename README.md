@@ -10,8 +10,6 @@ Frontend:
 - React
 - Redux
 - Axios
-- MUI
-- React Beautiful DND
 - Docker - for deployment
 
 Backend:
