@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(a(y@o_o8+9ipvf3%$$4z_%vyk@40qpb%d4x4fbb@bv%^$10wu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['185.124.109.30', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -118,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Whitelisting React port
-CORS_ORIGIN_WHITELIST = ('http://localhost:3000', )
+CORS_ORIGIN_WHITELIST = ('http://185.124.109.30:3000', )
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://185.124.109.30:3000',
 ]
 
 # Internationalization

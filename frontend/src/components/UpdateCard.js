@@ -1,22 +1,22 @@
 import React from "react";
-import {Component} from "react";
+import { Component } from "react";
 import axios from "axios";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {Button, TextareaAutosize} from "@mui/material";
-import {connect} from "react-redux";
-import doneImg from "../images/done.png"
-import undoneImg from "../images/undone.png"
-import deleteImg from "../images/delete.png"
-import {Close} from "@mui/icons-material";
-import {makeStyles} from "@mui/material";
-import {TextField} from "@mui/material";
+import { Button, TextareaAutosize } from "@mui/material";
+import { connect } from "react-redux";
+import doneImg from "../images/done.png";
+import undoneImg from "../images/undone.png";
+import deleteImg from "../images/delete.png";
+import { Close } from "@mui/icons-material";
+import { makeStyles } from "@mui/material";
+import { TextField } from "@mui/material";
 
 
 class UpdateCard extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {input: this.props.card.text, isDone: this.props.card.done, selectedDate: this.props.card.due};
+		this.state = { input: this.props.card.text, isDone: this.props.card.done, selectedDate: this.props.card.due };
 	}
 
 	closeForm = () => {
@@ -32,13 +32,13 @@ class UpdateCard extends Component {
 		const input = e.target.value
 		const max_len = 150
 		if (input.indexOf('\n') < 0 && input.length < max_len)
-			this.setState({input: input})
+			this.setState({ input: input })
 	}
 
 	handleDateTimeChange = (e) => {
 		console.log(e)
 		const dateTime = e.target.value
-		this.setState({dateTime: dateTime})
+		this.setState({ dateTime: dateTime })
 	}
 
 
@@ -60,12 +60,12 @@ class UpdateCard extends Component {
 			return
 		}
 
-		const {card} = this.props;
-		const {id} = card;
-		const {listId} = card;
-		const {index} = card;
+		const { card } = this.props;
+		const { id } = card;
+		const { listId } = card;
+		const { index } = card;
 
-		const url = `http://localhost:8000/api/cards/${id}/`
+		const url = `http://185.124.109.30:8000/api/cards/${id}/`
 		const data = {
 			listId: listId,
 			index: index,
@@ -74,12 +74,12 @@ class UpdateCard extends Component {
 			due: due,
 		}
 
-		const {projectId} = this.props;
+		const { projectId } = this.props;
 
 		axios.put(url, data)
 			.then(res => {
 				console.log(res.data);
-				this.props.updateCard({projectId: projectId, listId: listId, card: res.data})
+				this.props.updateCard({ projectId: projectId, listId: listId, card: res.data })
 				this.closeForm()
 			})
 			.catch(err => console.log(err))
@@ -87,48 +87,48 @@ class UpdateCard extends Component {
 
 	handeDoneChange = () => {
 		const done = this.state.isDone;
-		this.setState({isDone: !done});
+		this.setState({ isDone: !done });
 	}
 
 	renderDatePicker = () => {
-		const {selectedDate} = this.state;
+		const { selectedDate } = this.state;
 
 		return (
-			<form style={{display:"flex", alignItems:"center",}} noValidate>
+			<form style={{ display: "flex", alignItems: "center", }} noValidate>
 				<TextField
 					id="date"
-					label="Срок"
+					label="Due Date"
 					type="date"
 					value={selectedDate ? selectedDate : ""}
 					InputLabelProps={{
 						shrink: true,
 					}}
 					onChange={(newValue) => {
-						this.setState({selectedDate: newValue.target.value})
+						this.setState({ selectedDate: newValue.target.value })
 					}}
 				/>
 				<Close
-					style={{marginLeft: "8px", cursor: "pointer",}}
-					onClick={()=>{this.setState({selectedDate: null})}}/>
+					style={{ marginLeft: "8px", cursor: "pointer", }}
+					onClick={() => { this.setState({ selectedDate: null }) }} />
 			</form>
 		);
 	}
 
 	render = () => {
 		const done = this.state.isDone;
-		const placeholder = "Введите описание карточки...";
-		const doneButton = "Отметить как выполненное";
-		const undoneButton = "Вернуть в выполнение";
-		const deleteButton = "Удалить";
-		const saveButton = "Сохранить";
+		const placeholder = "Enter card description...";
+		const doneButton = "Mark as Done";
+		const undoneButton = "Mark as Undone";
+		const deleteButton = "Delete";
+		const saveButton = "Save";
 
 		return (
-			<div className="cardContainerForm" style={{cursor: "default",}}>
-				<div style={{display: "block"}}>
-					<Card sx={{boxShadow: 0, width: "300px", marginBottom: "8px", height: "221px",}}>
+			<div className="cardContainerForm" style={{ cursor: "default", }}>
+				<div style={{ display: "block" }}>
+					<Card sx={{ boxShadow: 0, width: "300px", marginBottom: "8px", height: "221px", }}>
 						<CardContent className="cardAndCheckBox">
 							<div className={"updateCardFormContainer"}
-								 style={{width: "100%", height: "110px",}}>
+								style={{ width: "100%", height: "110px", }}>
 								<TextareaAutosize
 									className="textArea"
 									style={done ? {
@@ -136,7 +136,7 @@ class UpdateCard extends Component {
 										width: "90%",
 										textDecoration: "line-through",
 										color: "#767678",
-									} : {padding: 4.5, width: "90%"}}
+									} : { padding: 4.5, width: "90%" }}
 									placeholder={placeholder}
 									autoFocus={true}
 									value={this.state.input}
@@ -151,7 +151,7 @@ class UpdateCard extends Component {
 							{this.renderDatePicker()}
 						</CardContent>
 					</Card>
-					<div style={{display: "flex", flexDirection: "row", alignItems: "center",}}>
+					<div style={{ display: "flex", flexDirection: "row", alignItems: "center", }}>
 						<Button
 							variant="contained"
 							style={{
@@ -163,8 +163,8 @@ class UpdateCard extends Component {
 							{saveButton}
 						</Button>
 						<Close
-							style={{marginLeft: "8px", cursor: "pointer",}}
-							onClick={this.closeForm}/>
+							style={{ marginLeft: "8px", cursor: "pointer", }}
+							onClick={this.closeForm} />
 					</div>
 				</div>
 				<div className={"cardFormButtons"}>
@@ -172,29 +172,24 @@ class UpdateCard extends Component {
 						variant="contained"
 						style={{
 							backgroundColor: "rgba(0, 0, 0, 0.3)",
-							// backgroundColor: "#EBECF0",
-							// color: "black",
-							// width: "100%",
 							marginBottom: "4px",
 							height: "72px",
 						}}
 						onClick={this.handeDoneChange}
 					>
-						<img src={done ? undoneImg : doneImg} alt={""} height={"30px"}/>
+						<img src={done ? undoneImg : doneImg} alt={""} height={"30px"} />
 						{done ? undoneButton : doneButton}
 					</Button>
 					<Button
 						variant="contained"
 						style={{
 							backgroundColor: "rgba(0, 0, 0, 0.3)",
-							// color: "black",
-							// width: "100%",
 							marginBottom: "4px",
 							height: "36px",
 						}}
 						onClick={this.deleteCardFromList}
 					>
-						<img src={deleteImg} alt={""} height={"30px"}/>
+						<img src={deleteImg} alt={""} height={"30px"} />
 						{deleteButton}
 					</Button>
 				</div>
@@ -203,14 +198,14 @@ class UpdateCard extends Component {
 	}
 
 	deleteCardFromList = () => {
-		const {card} = this.props;
-		const {id} = card;
-		const {listId} = card;
-		const {projectId} = this.props;
+		const { card } = this.props;
+		const { id } = card;
+		const { listId } = card;
+		const { projectId } = this.props;
 
-		this.props.deleteCard({projectId: projectId, listId: listId, cardId: id});
+		this.props.deleteCard({ projectId: projectId, listId: listId, cardId: id });
 		axios
-			.delete(`http://localhost:8000/api/cards/${id}/`)
+			.delete(`http://185.124.109.30:8000/api/cards/${id}/`)
 			.then(res => {
 				console.log(res.data);
 			})
@@ -220,10 +215,10 @@ class UpdateCard extends Component {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		updateCard: (payload) => dispatch({type: 'UPDATE_CARD', payload: payload}),
-		deleteCard: (payload) => dispatch({type: 'DELETE_CARD', payload: payload,}),
-		showModal: (payload) => dispatch({type: 'SHOW_MODAL', payload: payload}),
-		hideModal: () => dispatch({type: 'HIDE_MODAL'}),
+		updateCard: (payload) => dispatch({ type: 'UPDATE_CARD', payload: payload }),
+		deleteCard: (payload) => dispatch({ type: 'DELETE_CARD', payload: payload, }),
+		showModal: (payload) => dispatch({ type: 'SHOW_MODAL', payload: payload }),
+		hideModal: () => dispatch({ type: 'HIDE_MODAL' }),
 
 	}
 }

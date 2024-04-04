@@ -1,23 +1,23 @@
 import React from "react";
-import {Component} from "react";
-import {Button, Icon} from "@mui/material";
-import {Close} from "@mui/icons-material";
+import { Component } from "react";
+import { Button, Icon } from "@mui/material";
+import { Close } from "@mui/icons-material";
 import Card from "@mui/material/Card";
-import {TextareaAutosize} from "@mui/material";
+import { TextareaAutosize } from "@mui/material";
 import axios from "axios";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 class ActionButton extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {formOpen: false, input: ''};
+        this.state = { formOpen: false, input: '' };
         this.formRef = React.createRef();
         this.passClick = true;
     }
 
     openForm = async () => {
-        await this.setState({formOpen: true});
+        await this.setState({ formOpen: true });
 
         const a = document.getElementById(`cardsContainer_${this.props.listId}`)
         if (a && a.scrollHeight > a.offsetHeight)
@@ -32,7 +32,7 @@ class ActionButton extends Component {
 
     closeForm = () => {
         document.removeEventListener('click', this.handleClickOutside, false);
-        this.setState({formOpen: false, error: false});
+        this.setState({ formOpen: false, error: false });
         this.passClick = true
     }
 
@@ -49,17 +49,17 @@ class ActionButton extends Component {
     }
 
     renderAddButton = () => {
-        const {projectUser} = this.props;
-        const {projectButton} = this.props;
-        const {list} = this.props;
-        const buttonText = projectUser ? "Добавить участника" : projectButton ? "Добавить проект" : list ? "Добавить список" : "Добавить карточку";
+        const { projectUser } = this.props;
+        const { projectButton } = this.props;
+        const { list } = this.props;
+        const buttonText = projectUser ? "Add participant" : projectButton ? "Add project" : list ? "Add list" : "Add card";
         return (
             <div
                 className={(projectUser || projectButton) ? "projectOpenFormButton" : list ? "listOpenFormButton" : "cardOpenFormButton"}
                 onClick={this.openForm}
             >
                 <Icon>+</Icon>
-                <p style={{font: "caption"}}>{buttonText}</p>
+                <p style={{ font: "caption" }}>{buttonText}</p>
             </div>
         );
     }
@@ -73,7 +73,7 @@ class ActionButton extends Component {
         const input = e.target.value;
         const max_len = 255
         if (input.indexOf('\n') < 0 && input.length < max_len)
-            this.setState({input: input, error: false})
+            this.setState({ input: input, error: false })
     }
 
     handleSubmit = async () => {
@@ -82,19 +82,19 @@ class ActionButton extends Component {
             return
 
 
-        const {projectButton} = this.props;
-        const {list} = this.props;
-        const {index} = this.props
-        const {listId} = this.props
-        const {userId} = this.props;
-        const {projectId} = this.props;
-        const {title} = this.props;
-        const {users} = this.props;
-        const {projectUser} = this.props;
-        const {user} = this.props;
+        const { projectButton } = this.props;
+        const { list } = this.props;
+        const { index } = this.props
+        const { listId } = this.props
+        const { userId } = this.props;
+        const { projectId } = this.props;
+        const { title } = this.props;
+        const { users } = this.props;
+        const { projectUser } = this.props;
+        const { user } = this.props;
 
         const newUser = projectUser ? await axios
-            .get(`http://127.0.0.1:8000/api/user_search?input=${input}`)
+            .get(`http://185.124.109.30:8000/api/user_search?input=${input}`)
             .then((response) => {
                 return response.data;
             })
@@ -105,7 +105,7 @@ class ActionButton extends Component {
         console.log(userId);
         console.log(user);
 
-        const url = projectUser ? `http://localhost:8000/api/projects/${projectId}/` : projectButton ? "http://localhost:8000/api/projects/" : list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
+        const url = projectUser ? `http://185.124.109.30:8000/api/projects/${projectId}/` : projectButton ? "http://185.124.109.30:8000/api/projects/" : list ? "http://185.124.109.30:8000/api/lists/" : "http://185.124.109.30:8000/api/cards/"
         const data = projectButton ? {
             users: [userId],
             title: input,
@@ -125,9 +125,9 @@ class ActionButton extends Component {
             console.log(data);
 
             if (newUser) {
-                const usersId = [...users].map(({id}) => id)
+                const usersId = [...users].map(({ id }) => id)
                 if (usersId.includes(newUser.id)) {
-                    this.setState({error: true, errorMassage: 'Пользователь уже добавлен'})
+                    this.setState({ error: true, errorMassage: 'User already added' })
                 }
                 else {
                     axios.put(url, {
@@ -137,15 +137,15 @@ class ActionButton extends Component {
                     })
                         .then(res => {
                             console.log(res.data);
-                            this.props.updateProjectUsers({projectId: projectId, users: [...users, newUser]})
+                            this.props.updateProjectUsers({ projectId: projectId, users: [...users, newUser] })
                             this.closeForm()
-                            this.setState({input: undefined, error: false})
+                            this.setState({ input: undefined, error: false })
                         })
                         .catch(err => console.log(err))
                 }
             }
             else {
-                this.setState({error: true, errorMassage: 'Пользователь не найден'})
+                this.setState({ error: true, errorMassage: 'User not found' })
             }
 
 
@@ -155,30 +155,30 @@ class ActionButton extends Component {
                 .then(res => {
                     console.log(res.data);
                     projectButton ? this.props.addProjects({
-                            project: {
-                                id: res.data.id,
-                                title: res.data.title,
-                                users: [user],
-                                lists: []
-                            }
-                        }) :
-                        list ? this.props.addList({projectId: projectId, list: res.data}) :
-                            this.props.addCard({projectId: projectId, listId: listId, card: res.data})
+                        project: {
+                            id: res.data.id,
+                            title: res.data.title,
+                            users: [user],
+                            lists: []
+                        }
+                    }) :
+                        list ? this.props.addList({ projectId: projectId, list: res.data }) :
+                            this.props.addCard({ projectId: projectId, listId: listId, card: res.data })
                     this.closeForm()
-                    this.setState({input: undefined})
+                    this.setState({ input: undefined })
                 })
                 .catch(err => console.log(err))
         }
     }
 
     renderForm = () => {
-        const {projectButton} = this.props;
-        const {list} = this.props;
-        const {projectUser} = this.props;
-        const {error} = this.state;
-        const {errorMassage} = this.state;
-        const placeHolder = projectUser ? "Введите имя пользователя или email..." : projectButton ? "Введите название проекта..." : list ? "Введите название списка..." : "Введите описание карточки...";
-        const buttonTitle = projectUser ? "Добавить пользователя" : projectButton ? "Добавить проект" : list ? "Добавить список" : "Добавить карточку";
+        const { projectButton } = this.props;
+        const { list } = this.props;
+        const { projectUser } = this.props;
+        const { error } = this.state;
+        const { errorMassage } = this.state;
+        const placeHolder = projectUser ? "Enter username or email..." : projectButton ? "Enter project name..." : list ? "Enter list name..." : "Enter card description...";
+        const buttonTitle = projectUser ? "Add user" : projectButton ? "Add project" : list ? "Add list" : "Add card";
 
         return (
             <div className={projectUser ? "projectContainer" : projectButton ? "projectContainer" : list ? "listContainer" : null} ref={this.formRef}>
@@ -207,10 +207,10 @@ class ActionButton extends Component {
                             style={projectButton || list ? {
                                 fontSize: "1.17em",
                                 fontWeight: "bolder"
-                            } : {padding: 10, width: "92%"}}
+                            } : { padding: 10, width: "92%" }}
                         />
                     </Card>
-                    {error ? <div style={{color: 'red'}}>
+                    {error ? <div style={{ color: 'red' }}>
                         {errorMassage}
                     </div> : null}
                     <div className="formButtonGroup">
@@ -225,11 +225,11 @@ class ActionButton extends Component {
                             {buttonTitle}
                         </Button>
                         <Close
-                            style={{marginLeft: 8, cursor: "pointer",}}
+                            style={{ marginLeft: 8, cursor: "pointer", }}
                             onClick={() => {
                                 this.closeForm();
-                                this.setState({input: undefined});
-                            }}/>
+                                this.setState({ input: undefined });
+                            }} />
                     </div>
                 </div>
             </div>);
@@ -242,10 +242,10 @@ class ActionButton extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addProjects: (payload) => dispatch({type: 'ADD_PROJECT', payload: payload}),
-        addList: (payload) => dispatch({type: 'ADD_LIST', payload: payload}),
-        addCard: (payload) => dispatch({type: 'ADD_CARD', payload: payload}),
-        updateProjectUsers: (payload) => dispatch({type: 'UPDATE_USERS', payload: payload}),
+        addProjects: (payload) => dispatch({ type: 'ADD_PROJECT', payload: payload }),
+        addList: (payload) => dispatch({ type: 'ADD_LIST', payload: payload }),
+        addCard: (payload) => dispatch({ type: 'ADD_CARD', payload: payload }),
+        updateProjectUsers: (payload) => dispatch({ type: 'UPDATE_USERS', payload: payload }),
     }
 }
 

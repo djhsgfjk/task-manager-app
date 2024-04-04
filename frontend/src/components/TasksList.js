@@ -2,17 +2,17 @@ import React from "react";
 import TaskCard from "./TaskCard";
 import ActionButton from "./ActionButton";
 // import UpdateForm from "./UpdateForm";
-import {Component} from "react";
-import {connect} from "react-redux";
+import { Component } from "react";
+import { connect } from "react-redux";
 
-import {Droppable} from "react-beautiful-dnd";
-import {Draggable} from "react-beautiful-dnd";
+import { Droppable } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 
 import axios from "axios";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import {Button, TextareaAutosize} from "@mui/material";
-import {Close} from "@mui/icons-material";
+import { Button, TextareaAutosize } from "@mui/material";
+import { Close } from "@mui/icons-material";
 import deleteImg from "../images/delete.png";
 import sortImg from "../images/sort.png"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -21,19 +21,19 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 class TasksList extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {formOpen: false, input: this.props.title, actionsOpen: false};
+		this.state = { formOpen: false, input: this.props.title, actionsOpen: false };
 		this.formRef = React.createRef();
 		this.passClick = true;
 	}
 
 	deleteList = () => {
-		const {listId} = this.props;
-		const {projectId} = this.props;
+		const { listId } = this.props;
+		const { projectId } = this.props;
 
-		this.props.deleteList({projectId: projectId, listId: listId});
+		this.props.deleteList({ projectId: projectId, listId: listId });
 
 		axios
-			.delete(`http://localhost:8000/api/lists/${listId}/`)
+			.delete(`http://185.124.109.30:8000/api/lists/${listId}/`)
 			.then(res => {
 				console.log(res.data);
 				this.closeActions();
@@ -42,7 +42,7 @@ class TasksList extends Component {
 	}
 
 	openForm = async () => {
-		await this.setState({formOpen: true});
+		await this.setState({ formOpen: true });
 		const e = document.getElementById("updateFormTextArea")
 		e.select()
 
@@ -52,7 +52,7 @@ class TasksList extends Component {
 
 	closeForm = () => {
 		document.removeEventListener('click', this.handleClickOutside, false);
-		this.setState({formOpen: false, input: this.props.title});
+		this.setState({ formOpen: false, input: this.props.title });
 		this.passClick = true;
 	}
 
@@ -77,7 +77,7 @@ class TasksList extends Component {
 		const input = e.target.value
 		const max_len = 15
 		if (input.indexOf('\n') < 0 && input.length < max_len)
-			this.setState({input: input})
+			this.setState({ input: input })
 	}
 
 	handleSubmit = () => {
@@ -89,36 +89,36 @@ class TasksList extends Component {
 			this.closeForm()
 			return
 		}
-		const {listId} = this.props;
-		const {listIndex} = this.props;
-		const {projectId} = this.props;
+		const { listId } = this.props;
+		const { listIndex } = this.props;
+		const { projectId } = this.props;
 		console.log(projectId)
 
-		const url = `http://localhost:8000/api/lists/${listId}/`
+		const url = `http://185.124.109.30:8000/api/lists/${listId}/`
 		const data =
-			{
-				projectId: projectId,
-				index: listIndex,
-				title: input,
-			}
+		{
+			projectId: projectId,
+			index: listIndex,
+			title: input,
+		}
 
 		axios.put(url, data)
 			.then(res => {
 				console.log(res.data);
-				this.props.updateList({projectId: projectId, list: res.data})
+				this.props.updateList({ projectId: projectId, list: res.data })
 				this.closeForm()
 			})
 			.catch(err => console.log(err))
 	}
 
 	openActions = async () => {
-		await this.setState({actionsOpen: true});
+		await this.setState({ actionsOpen: true });
 		document.addEventListener('click', this.handleClickOutsideActions, false);
 	}
 
 	closeActions = () => {
 		document.removeEventListener('click', this.handleClickOutsideActions, false);
-		this.setState({actionsOpen: false});
+		this.setState({ actionsOpen: false });
 		this.passClick = true;
 	}
 
@@ -136,9 +136,9 @@ class TasksList extends Component {
 	}
 
 	handleSortByDue = () => {
-		const {listId} = this.props
-		const {cards} = this.props
-		const {projectId} = this.props
+		const { listId } = this.props
+		const { cards } = this.props
+		const { projectId } = this.props
 
 		const newCards = cards.slice().sort((a, b) => {
 			if (a.due === null)
@@ -157,21 +157,21 @@ class TasksList extends Component {
 					return dayDiff
 			}
 		}).map((card, index) => {
-			return {...card, index: index}
+			return { ...card, index: index }
 		})
 
-		this.props.sortListByDue({projectId: projectId, listId:listId, listCards: newCards})
+		this.props.sortListByDue({ projectId: projectId, listId: listId, listCards: newCards })
 
 		newCards.forEach((card) => {
-			const url = `http://localhost:8000/api/cards/${card.id}/`;
+			const url = `http://185.124.109.30:8000/api/cards/${card.id}/`;
 			const data =
-				{
-					listId: listId,
-					index: card.index,
-					text: card.text,
-					done: card.done,
-					due: card.due,
-				}
+			{
+				listId: listId,
+				index: card.index,
+				text: card.text,
+				done: card.done,
+				due: card.due,
+			}
 
 			axios.put(url, data)
 				.then(res => {
@@ -183,50 +183,40 @@ class TasksList extends Component {
 	}
 
 	renderActions = () => {
-		const {listId} = this.props
-		const deleteButton = "Удалить список";
-		const sortByDueButton = "Сортировать по сроку";
+		const { listId } = this.props
+		const deleteButton = "Delete List";
+		const sortByDueButton = "Sort by Due Date";
 
 		return (
 			<div className={"listFormButtons"} id="actionsForm" ref={this.formRef}>
-				<div style={{marginTop: "8px", color: "#767678", textAlign: "center", fontSize: "1.05rem"}}>Действия со
-					списком
+				<div style={{ marginTop: "8px", color: "#767678", textAlign: "center", fontSize: "1.05rem" }}>List Actions
 				</div>
-				<hr style={{width: "90%", backgroundColor: "#767678", color: "#767678"}}/>
+				<hr style={{ width: "90%", backgroundColor: "#767678", color: "#767678" }} />
 				<Button
 					variant="contained"
-					sx={{boxShadow: 0,}}
+					sx={{ boxShadow: 0, }}
 					style={{
-						// backgroundColor: "rgba(0, 0, 0, 0.7)",
-						// color: "black",
-						// width: "100%",
 						backgroundColor: "inherit",
 						color: "#767678",
 						marginBottom: "4px",
-						// height: "36px",
-						// position: "absolute",
 					}}
 					onClick={this.handleSortByDue}
 				>
-					<img src={sortImg} alt={""} height={"30px"}/>
+					<img src={sortImg} alt={""} height={"30px"} />
 					{sortByDueButton}
 				</Button>
 				<Button
 					variant="contained"
-					sx={{boxShadow: 0,}}
+					sx={{ boxShadow: 0, }}
 					style={{
-						// backgroundColor: "rgba(0, 0, 0, 0.7)",
-						// color: "black",
-						// width: "100%",
 						backgroundColor: "inherit",
 						color: "#767678",
 						marginBottom: "4px",
 						height: "36px",
-						// position: "absolute",
 					}}
 					onClick={this.deleteList}
 				>
-					<img src={deleteImg} alt={""} height={"30px"}/>
+					<img src={deleteImg} alt={""} height={"30px"} />
 					{deleteButton}
 				</Button>
 			</div>
@@ -235,24 +225,24 @@ class TasksList extends Component {
 	}
 
 	renderTitle = () => {
-		const {title} = this.props;
+		const { title } = this.props;
 		return (
 			<div className="listTitle">
-				<div id="listTitleContainer" style={{width: "270px",}} onClick={this.openForm}>
+				<div id="listTitleContainer" style={{ width: "270px", }} onClick={this.openForm}>
 					<h3>{title}</h3>
 				</div>
-				<MoreHorizIcon style={{width: "10%", color: "#767678", marginTop: "16px"}} onClick={this.openActions}/>
+				<MoreHorizIcon style={{ width: "10%", color: "#767678", marginTop: "16px" }} onClick={this.openActions} />
 				{this.state.actionsOpen ? this.renderActions() : null}
 			</div>);
 	}
 
 	renderForm = () => {
-		const placeHolder = "Введите название списка...";
-		const buttonTitle = "Сохранить";
+		const placeHolder = "Enter list title...";
+		const buttonTitle = "Save";
 
 		return (
-			<div ref={this.formRef} style={{marginBottom: "8px", display: "flex",}}>
-				<div style={{display: "block"}}>
+			<div ref={this.formRef} style={{ marginBottom: "8px", display: "flex", }}>
+				<div style={{ display: "block" }}>
 					<Card
 						sx={{
 							border: 1,
@@ -275,7 +265,7 @@ class TasksList extends Component {
 								return this.handleKeyPress(e)
 							}}
 							id="updateFormTextArea"
-							style={{fontSize: "1.17em", fontWeight: "bolder",}}
+							style={{ fontSize: "1.17em", fontWeight: "bolder", }}
 						/>
 					</Card>
 					<div className="formButtonGroup">
@@ -290,27 +280,27 @@ class TasksList extends Component {
 							{buttonTitle}
 						</Button>
 						<Close
-							style={{marginLeft: 8, cursor: "pointer",}}
-							onClick={this.closeForm}/>
+							style={{ marginLeft: 8, cursor: "pointer", }}
+							onClick={this.closeForm} />
 					</div>
 				</div>
 			</div>);
 	}
 
 	render = () => {
-		const {listId} = this.props;
-		const {listIndex} = this.props;
-		const {cards} = this.props;
+		const { listId } = this.props;
+		const { listIndex } = this.props;
+		const { cards } = this.props;
 		const newCardIndex = cards.length;
-		const {projectId} = this.props;
+		const { projectId } = this.props;
 
 		return (
 			<Draggable draggableId={'list_' + listId} index={listIndex} type='lists'>
 				{(provided) => (
 					<div className="listContainer"
-						 {...provided.draggableProps}
-						 {...provided.dragHandleProps}
-						 ref={provided.innerRef}
+						{...provided.draggableProps}
+						{...provided.dragHandleProps}
+						ref={provided.innerRef}
 					>
 						<div className="listContent">
 							<div className="listHead">
@@ -319,9 +309,9 @@ class TasksList extends Component {
 							<Droppable droppableId={'list_' + listId} type='cards'>
 								{(provided) => (
 									<div className="listBody"
-										 ref={provided.innerRef}
-										 {...provided.droppableProps}
-										 style={{overflowY: "hidden"}}
+										ref={provided.innerRef}
+										{...provided.droppableProps}
+										style={{ overflowY: "hidden" }}
 									>
 										<div
 											className="cardsContainer"
@@ -340,7 +330,7 @@ class TasksList extends Component {
 											)}
 											{provided.placeholder}
 										</div>
-										<ActionButton index={newCardIndex} projectId={projectId} listId={listId}/>
+										<ActionButton index={newCardIndex} projectId={projectId} listId={listId} />
 									</div>
 								)}
 							</Droppable>
@@ -355,11 +345,11 @@ class TasksList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		updateList: (payload) => dispatch({type: 'UPDATE_LIST', payload: payload}),
-		sortListByDue: (payload) => dispatch({type: 'SORT_LIST_BY_DUE', payload: payload}),
-		deleteList: (payload) => dispatch({type: 'DELETE_LIST', payload: payload}),
-		showModal: () => dispatch({type: 'SHOW_MODAL'}),
-		hideModal: () => dispatch({type: 'HIDE_MODAL'}),
+		updateList: (payload) => dispatch({ type: 'UPDATE_LIST', payload: payload }),
+		sortListByDue: (payload) => dispatch({ type: 'SORT_LIST_BY_DUE', payload: payload }),
+		deleteList: (payload) => dispatch({ type: 'DELETE_LIST', payload: payload }),
+		showModal: () => dispatch({ type: 'SHOW_MODAL' }),
+		hideModal: () => dispatch({ type: 'HIDE_MODAL' }),
 
 	}
 }

@@ -26,7 +26,7 @@ class Auth extends Component {
 		const {user} = this.props;
 		const {projects} = this.props;
 		const {navOpened} = this.props.currentProject;
-		const logoutButton = "Выйти";
+		const logoutButton = "Log out";
 
 		return (
 			<div className="navigation" style={navOpened ? {backgroundColor: "#9CC0D9"} : {}}>
@@ -38,7 +38,7 @@ class Auth extends Component {
 					<div style={{overflow: "hidden",}}>
 						<div className="profile"
 							 style={{display: "flex", flexDirection: "row", flexShrink: 0, alignItems: "center", overflow: "hidden"}}>
-							<h3>Здравствуйте, {username}!</h3>
+							<h3>Welcome, {username}!</h3>
 							<Button
 								variant="contained"
 								style={{
