@@ -94,7 +94,7 @@ class ActionButton extends Component {
         const { user } = this.props;
 
         const newUser = projectUser ? await axios
-            .get(`http://185.124.109.30:8000/api/user_search?input=${input}`)
+            .get(`http://localhost:8000/api/user_search?input=${input}`)
             .then((response) => {
                 return response.data;
             })
@@ -105,7 +105,7 @@ class ActionButton extends Component {
         console.log(userId);
         console.log(user);
 
-        const url = projectUser ? `http://185.124.109.30:8000/api/projects/${projectId}/` : projectButton ? "http://185.124.109.30:8000/api/projects/" : list ? "http://185.124.109.30:8000/api/lists/" : "http://185.124.109.30:8000/api/cards/"
+        const url = projectUser ? `http://localhost:8000/api/projects/${projectId}/` : projectButton ? "http://localhost:8000/api/projects/" : list ? "http://localhost:8000/api/lists/" : "http://localhost:8000/api/cards/"
         const data = projectButton ? {
             users: [userId],
             title: input,

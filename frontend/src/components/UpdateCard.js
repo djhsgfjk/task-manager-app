@@ -65,7 +65,7 @@ class UpdateCard extends Component {
 		const { listId } = card;
 		const { index } = card;
 
-		const url = `http://185.124.109.30:8000/api/cards/${id}/`
+		const url = `http://localhost:8000/api/cards/${id}/`
 		const data = {
 			listId: listId,
 			index: index,
@@ -205,7 +205,7 @@ class UpdateCard extends Component {
 
 		this.props.deleteCard({ projectId: projectId, listId: listId, cardId: id });
 		axios
-			.delete(`http://185.124.109.30:8000/api/cards/${id}/`)
+			.delete(`http://localhost:8000/api/cards/${id}/`)
 			.then(res => {
 				console.log(res.data);
 			})
