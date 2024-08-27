@@ -22,7 +22,7 @@ class Project extends Component {
 
     uploadCardChanges = async (card) => {
         axios
-            .put(`http://localhost:8000/api/cards/${card.id}/`, card)
+            .put(`http://209.126.0.235:8000/api/cards/${card.id}/`, card)
             .then(res => {
                 console.log(res.data);
             })
@@ -32,7 +32,7 @@ class Project extends Component {
     uploadListChanges = async (list) => {
         const id = this.props.currentProject.id;
         axios
-            .put(`http://localhost:8000/api/lists/${list.id}/`, {projectId: id, index: list.index, title: list.title})
+            .put(`http://209.126.0.235:8000/api/lists/${list.id}/`, {projectId: id, index: list.index, title: list.title})
             .then(res => {
                 console.log(res.data);
             })
@@ -195,7 +195,7 @@ class Project extends Component {
 
         const {currentProject} = this.props;
 
-        const url = `http://localhost:8000/api/projects/${currentProject.id}/`
+        const url = `http://209.126.0.235:8000/api/projects/${currentProject.id}/`
         const data =
             {
                 projectId: currentProject.id,

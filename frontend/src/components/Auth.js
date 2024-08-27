@@ -88,7 +88,7 @@ class Auth extends Component {
 
         axios
             .post(
-                'http://localhost:8000/api/signup',
+                'http://209.126.0.235:8000/api/signup',
                 {
                     username: formUsername,
                     email: formEmail,
@@ -121,7 +121,7 @@ class Auth extends Component {
 
         axios
             .post(
-                'http://localhost:8000/api/login',
+                'http://209.126.0.235:8000/api/login',
                 {
                     username: this.state.formUsername,
                     password: this.state.formPassword,

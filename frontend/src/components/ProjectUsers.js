@@ -45,7 +45,7 @@ class ProjectUsers extends React.Component {
 		const users = this.props.projects.find((project) => (project.id === projectId)).users;
 		const { title } = this.props;
 
-		const url = `http://localhost:8000/api/projects/${projectId}/`;
+		const url = `http://209.126.0.235:8000/api/projects/${projectId}/`;
 		const data = {
 			id: projectId,
 			users: users.map(({ id }) => id).filter((id) => id !== userId),

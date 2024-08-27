@@ -33,7 +33,7 @@ class TasksList extends Component {
 		this.props.deleteList({ projectId: projectId, listId: listId });
 
 		axios
-			.delete(`http://localhost:8000/api/lists/${listId}/`)
+			.delete(`http://209.126.0.235:8000/api/lists/${listId}/`)
 			.then(res => {
 				console.log(res.data);
 				this.closeActions();
@@ -94,7 +94,7 @@ class TasksList extends Component {
 		const { projectId } = this.props;
 		console.log(projectId)
 
-		const url = `http://localhost:8000/api/lists/${listId}/`
+		const url = `http://209.126.0.235:8000/api/lists/${listId}/`
 		const data =
 		{
 			projectId: projectId,
@@ -163,7 +163,7 @@ class TasksList extends Component {
 		this.props.sortListByDue({ projectId: projectId, listId: listId, listCards: newCards })
 
 		newCards.forEach((card) => {
-			const url = `http://localhost:8000/api/cards/${card.id}/`;
+			const url = `http://209.126.0.235:8000/api/cards/${card.id}/`;
 			const data =
 			{
 				listId: listId,
